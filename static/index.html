@@ -751,8 +751,11 @@
       <!-- Quick Preset Buttons -->
       <div class="presets-bar">
         <span style="color: var(--text-muted); font-weight: 500;">⚡ Quick Presets:</span>
+        <button type="button" class="preset-chip" style="background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); font-weight: 600;" onclick="loadStep2HandoffPreset()">
+          📥 Load Step 2 Validation Handoff
+        </button>
         <button type="button" class="preset-chip preset-chip-featured" onclick="loadClientTikToksPreset()">
-          📱 Load 6 Client TikToks & Paid Ads (Real Metrics)
+          📱 Load 6 Client TikToks & Paid Ads
         </button>
         <button type="button" class="preset-chip" onclick="loadPreset('business')">
           🏢 B2B MarTech (Synthetic • $1,200)
@@ -760,6 +763,22 @@
         <button type="button" class="preset-chip" onclick="loadPreset('creator')">
           🎨 Creator Economy (Synthetic • $750)
         </button>
+      </div>
+
+      <!-- Step 2 Validation Verdict Callout Box -->
+      <div id="verdict-callout-box" class="notion-callout" style="display: none; margin-top: 14px; background: #fdfcf9; border-color: #ede6d8;">
+        <span class="notion-callout-icon">📋</span>
+        <div class="notion-callout-text" style="color: #44403c;">
+          <div style="font-weight: 600; color: #1c1917; margin-bottom: 2px;">
+            Step 2 Validation Verdict: <span id="verdict-status-pill" class="chip chip-survived" style="font-size: 11px;">Approved • 94% Match</span>
+          </div>
+          <div id="verdict-reasoning-text" style="font-style: normal; font-size: 12px; margin-bottom: 4px;">
+            Strong viral engagement and watch-time affinity on TikTok/Instagram; young professionals have deep resonance with remote work comedy.
+          </div>
+          <div style="font-size: 11.5px; color: #78716c; font-style: normal;">
+            <strong>Strategic Angle:</strong> <span id="verdict-strategy-text">Focus on relatable burnout humor and quick-fix productivity hacks with dynamic kinetic subtitles.</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -867,6 +886,7 @@
     let currentPersona = "business";
     let campaignHistory = [];
     let currentSeedPosts = [];
+    let currentValidationHandoff = null;
     const PALETTE = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316", "#14b8a6", "#6366f1", "#84cc16"];
 
     function showToast(msg) {
@@ -884,7 +904,60 @@
       goalSelect.value = (type === "business") ? "roas" : "engagement";
     }
 
+    function loadStep2HandoffPreset() {
+      currentSeedPosts = [];
+      document.getElementById("input-trend").value = "POV Office Satire & Corporate Relatability";
+      document.getElementById("input-niche").value = "Creator Economy & Work Culture";
+      document.getElementById("input-keywords").value = "Office Humor, Remote Work Memes, Meeting Fatigue, Tech Satire";
+      document.getElementById("input-budget").value = 850;
+      setPersona("content_creator");
+
+      document.getElementById("verdict-callout-box").style.display = "flex";
+      document.getElementById("verdict-status-pill").innerText = "Approved • 94% Match";
+      document.getElementById("verdict-reasoning-text").innerText =
+        "Strong engagement and watch-time affinity on TikTok/Instagram; young professionals have deep resonance with remote work comedy.";
+      document.getElementById("verdict-strategy-text").innerText =
+        "Focus on relatable burnout humor and quick-fix productivity hacks with dynamic kinetic subtitles.";
+
+      currentValidationHandoff = {
+        campaign_id: "camp_step2_handoff",
+        selected_trend: {
+          trend_id: "trend_pov_office_01",
+          trend_name: "POV Office Satire & Corporate Relatability",
+          summary: "Short-form video trend satirizing modern corporate meeting culture and tech startup dynamics.",
+          keywords: ["Office Humor", "Remote Work Memes", "Meeting Fatigue", "Tech Satire"],
+          recommended_hooks: [
+            "POV: It's 4:58 PM on a Friday and your manager schedules an urgent sync 💀",
+            "Why 94% of remote workers are secretly multitasking during all-hands meetings",
+            "POV: You automated 80% of your job with 3 AI agents and nobody noticed",
+            "The exact prompt that saved me 12 hours of spreadsheets this week"
+          ],
+          recommended_formats: ["short_form_video", "carousel", "hook_text"],
+          hashtags: ["#corporatelife", "#officememes", "#remotework", "#productivity"]
+        },
+        niche: "Creator Economy & Work Culture",
+        persona: {
+          type: "content_creator",
+          tone: "humorous and relatable",
+          target_audience: "Tech Workers, Remote Employees, and Digital Natives",
+          risk_tolerance: "high",
+          primary_goal: "engagement"
+        },
+        verdict: {
+          verdict_status: "approved",
+          suitability_score: 0.94,
+          reasoning: "Strong viral engagement and watch-time affinity on TikTok/Instagram; young professionals have deep resonance with remote work comedy.",
+          strategic_angle: "Focus on relatable burnout humor and quick-fix productivity hacks with dynamic kinetic subtitles."
+        },
+        total_budget: 850.0
+      };
+
+      showToast("Loaded Official Step 2 Validation Handoff Bundle!");
+    }
+
     function loadClientTikToksPreset() {
+      currentValidationHandoff = null;
+      document.getElementById("verdict-callout-box").style.display = "none";
       document.getElementById("input-trend").value = "TikTok & Multi-Channel Paid Ads Acceleration";
       document.getElementById("input-niche").value = "B2B MarTech & SaaS";
       document.getElementById("input-keywords").value = "TikTok Ads, Multi-Agent Workflow, ROAS Engine, Paid Social";
@@ -1031,6 +1104,8 @@
 
     function loadPreset(type) {
       currentSeedPosts = [];
+      currentValidationHandoff = null;
+      document.getElementById("verdict-callout-box").style.display = "none";
       if (type === "business") {
         document.getElementById("input-trend").value = "Autonomous Multi-Agent Marketing Workflows";
         document.getElementById("input-niche").value = "B2B MarTech & SaaS";
@@ -1053,36 +1128,53 @@
       btnInit.disabled = true;
       btnInit.innerText = "⏳ Initializing...";
 
-      const trend = document.getElementById("input-trend").value.trim();
-      const niche = document.getElementById("input-niche").value.trim();
-      const kw = document.getElementById("input-keywords").value.split(",").map(s => s.trim()).filter(Boolean);
       const budget = parseFloat(document.getElementById("input-budget").value) || 1000;
       const goal = document.getElementById("input-goal").value;
+      let payload = null;
 
-      const payload = {
-        validation_input: {
-          trend_name: trend,
-          campaign_name: trend,
-          keywords: kw,
-          niche: niche,
-          persona: {
-            type: currentPersona,
-            tone: currentPersona === "business" ? "authoritative and cutting-edge" : "casual and authentic",
-            target_audience: currentPersona === "business" ? "Enterprise Marketers & Founders" : "Creators & Early Adopters",
-            risk_tolerance: "medium",
-            primary_goal: goal
+      if (currentValidationHandoff) {
+        currentValidationHandoff.total_budget = budget;
+        currentValidationHandoff.persona.type = currentPersona;
+        currentValidationHandoff.persona.primary_goal = goal;
+        payload = {
+          validation_handoff: currentValidationHandoff,
+          config: {
+            population_size: 10,
+            mutation_rate: 0.20,
+            elitism_ratio: 0.20,
+            tournament_size: 3
+          }
+        };
+      } else {
+        const trend = document.getElementById("input-trend").value.trim();
+        const niche = document.getElementById("input-niche").value.trim();
+        const kw = document.getElementById("input-keywords").value.split(",").map(s => s.trim()).filter(Boolean);
+
+        payload = {
+          validation_input: {
+            trend_name: trend,
+            campaign_name: trend,
+            keywords: kw,
+            niche: niche,
+            persona: {
+              type: currentPersona,
+              tone: currentPersona === "business" ? "authoritative and cutting-edge" : "casual and authentic",
+              target_audience: currentPersona === "business" ? "Enterprise Marketers & Founders" : "Creators & Early Adopters",
+              risk_tolerance: "medium",
+              primary_goal: goal
+            },
+            recommended_formats: ["short_form_video", "carousel", "high_contrast_post"],
+            total_budget: budget,
+            seed_posts: currentSeedPosts
           },
-          recommended_formats: ["short_form_video", "carousel", "high_contrast_post"],
-          total_budget: budget,
-          seed_posts: currentSeedPosts
-        },
-        config: {
-          population_size: 10,
-          mutation_rate: 0.20,
-          elitism_ratio: 0.20,
-          tournament_size: 3
-        }
-      };
+          config: {
+            population_size: 10,
+            mutation_rate: 0.20,
+            elitism_ratio: 0.20,
+            tournament_size: 3
+          }
+        };
+      }
 
       try {
         const res = await fetch("/api/v1/optimize/init", {

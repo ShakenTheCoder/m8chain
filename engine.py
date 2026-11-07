@@ -216,21 +216,52 @@ class EvolutionaryOptimizationEngine:
         return population
 
     def _initialize_synthetic_population(self, validation_input: ValidationInput) -> List[Candidate]:
-        """Seed Generation 0 from synthetic templates when no seed posts are supplied."""
+        """Seed Generation 0 from Step 2 Validation elements, recommended hooks, and strategic angle."""
         population: List[Candidate] = []
         platforms = [Platform.INSTAGRAM, Platform.TIKTOK, Platform.LINKEDIN, Platform.X]
         niche = validation_input.niche
         trend = validation_input.trend_name
         keywords = validation_input.keywords or [niche, "growth", "automation"]
         persona = validation_input.persona
+        rec_hooks = validation_input.recommended_hooks or []
+        rec_formats = validation_input.recommended_formats or ["short_form_video", "carousel", "hook_text"]
+        strategic_angle = validation_input.strategic_angle
+
+        # Register recommended hooks into dynamic pool for evolution
+        if rec_hooks:
+            self.dynamic_hooks.extend(rec_hooks)
 
         for i in range(self.config.population_size):
             kw = keywords[i % len(keywords)]
-            platform = platforms[i % len(platforms)]
+            format_choice = rec_formats[i % len(rec_formats)]
 
-            hook = random.choice(self.HOOK_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
+            # Map format choice to preferred platform
+            if "video" in format_choice.lower():
+                platform = random.choice([Platform.TIKTOK, Platform.INSTAGRAM])
+            elif "carousel" in format_choice.lower():
+                platform = random.choice([Platform.INSTAGRAM, Platform.LINKEDIN])
+            elif "text" in format_choice.lower():
+                platform = random.choice([Platform.X, Platform.LINKEDIN])
+            else:
+                platform = platforms[i % len(platforms)]
+
+            # Select hook: prioritize recommended hooks from Step 2 if available
+            if rec_hooks and (i < len(rec_hooks) or random.random() < 0.65):
+                hook = rec_hooks[i % len(rec_hooks)]
+            else:
+                hook = random.choice(self.HOOK_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
+
+            # Generate caption body aligned with persona tone and niche
             caption = random.choice(self.CAPTION_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
-            visual = random.choice(self.VISUAL_PROMPT_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
+
+            # Visual asset prompt combining strategic angle and format
+            if strategic_angle and (i % 2 == 0):
+                visual = (
+                    f"Strategic positioning: '{strategic_angle}'. "
+                    f"Adobe Express {format_choice} motion asset, high contrast palette with neon accents, 9:16 vertical ratio."
+                )
+            else:
+                visual = random.choice(self.VISUAL_PROMPT_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
 
             cta_pool = (
                 self.CTA_CREATOR_TEMPLATES

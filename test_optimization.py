@@ -13,7 +13,10 @@ from schemas import (
     PersonaType,
     Platform,
     PostMetrics,
+    TrendElementGroup,
+    ValidationHandoffBundle,
     ValidationInput,
+    ValidationVerdict,
 )
 from simulator import MarketingPerformanceSimulator
 
@@ -235,3 +238,65 @@ def test_client_seed_posts_initialization():
     assert seed_cands[0]["budget"]["daily_budget"] > 0.0
     total_allocated = sum(c["budget"]["daily_budget"] for c in cands)
     assert abs(total_allocated - 1200.0) <= 0.01
+
+
+def test_validation_handoff_bundle_pipeline():
+    """Verify EvolutionaryOptimizationEngine direct population initialization with ValidationHandoffBundle."""
+    bundle = ValidationHandoffBundle(
+        campaign_id="camp_bundle_direct_test",
+        selected_trend=TrendElementGroup(
+            trend_id="trend_agentic_workflows",
+            trend_name="Agentic Workflows in Enterprise",
+            summary="Autonomous multi-agent orchestration replacing point SaaS tools",
+            keywords=["Autonomous Agents", "Enterprise AI", "Orchestration"],
+            recommended_hooks=[
+                "Why enterprise companies are replacing 5 SaaS tools with 1 autonomous agent",
+                "The agent architecture that handles 10,000 inbound tickets with 0 human intervention",
+            ],
+            recommended_formats=["short_form_video", "carousel"],
+            hashtags=["#EnterpriseAI", "#AgenticWorkflows"],
+        ),
+        niche="Enterprise AI",
+        persona=Persona(
+            type=PersonaType.BUSINESS,
+            tone="technical and commanding",
+            target_audience="CIOs and VP Infrastructure",
+            risk_tolerance="low",
+            primary_goal="roas",
+        ),
+        verdict=ValidationVerdict(
+            verdict_status="approved",
+            suitability_score=95.0,
+            reasoning="High buying intent and mission-critical pain point",
+            strategic_angle="Highlight latency reductions and audited ROI savings",
+        ),
+        total_budget=2000.0,
+    )
+
+    # Convert to ValidationInput via model validator
+    val_input = ValidationInput.model_validate(bundle.model_dump())
+    assert val_input.trend_name == "Agentic Workflows in Enterprise"
+    assert val_input.strategic_angle == "Highlight latency reductions and audited ROI savings"
+    assert len(val_input.recommended_hooks) == 2
+
+    config = GAConfig(population_size=8)
+    engine = EvolutionaryOptimizationEngine(config=config)
+    pop = engine.initialize_population(val_input)
+
+    assert len(pop) == 8
+    hooks = [c.post.hook for c in pop]
+    assert any(h in val_input.recommended_hooks for h in hooks)
+
+    # Check that strategic angle is infused into visuals
+    assert any("Highlight latency reductions and audited ROI savings" in c.post.visual_asset_prompt for c in pop)
+
+    # Check budget conservation in Gen 0
+    total_budget_gen0 = sum(c.budget.daily_budget for c in pop)
+    assert abs(total_budget_gen0 - 2000.0) <= 0.01
+
+    # Step to Gen 1
+    gen1 = engine.step(pop, val_input, generation_idx=1)
+    assert gen1.generation == 1
+    assert len(gen1.active_candidates) == 8
+    total_budget_gen1 = sum(c.budget.daily_budget for c in gen1.active_candidates)
+    assert abs(total_budget_gen1 - 2000.0) <= 0.01

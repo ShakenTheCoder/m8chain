@@ -24,7 +24,10 @@ from schemas import (
     PersonaType,
     Platform,
     PostChromosome,
+    TrendElementGroup,
+    ValidationHandoffBundle,
     ValidationInput,
+    ValidationVerdict,
 )
 from simulator import MarketingPerformanceSimulator
 
@@ -593,3 +596,154 @@ class TestFastAPIRoutes:
         survivors = [c for c in gen1["active_candidates"] if c["status"] == "survived"]
         assert len(survivors) >= 1
         assert any(c["original_seed_id"] == "tiktok_top_performer" for c in survivors)
+
+    def test_validation_handoff_bundle_initialization(self):
+        """Test POST /api/v1/optimize/init with official Step 2 ValidationHandoffBundle."""
+        bundle_payload = {
+            "campaign_id": "camp_val_step2_deepseek",
+            "selected_trend": {
+                "trend_id": "trend_deepseek_r1",
+                "trend_name": "DeepSeek R1 Cost Arbitrage",
+                "summary": "Engineering teams migrating high-volume queries to open weights for 90% savings",
+                "keywords": ["DeepSeek R1", "Cost Arbitrage", "AI Reasoning", "Cloud Savings"],
+                "recommended_hooks": [
+                    "We cut our OpenAI bill by 87% in 48 hours without losing model reasoning power",
+                    "Why tech leads are quietly moving enterprise agents to DeepSeek R1 this week",
+                    "The $50,000 monthly AWS savings checklist for autonomous AI pipelines",
+                ],
+                "recommended_formats": ["short_form_video", "carousel"],
+                "hashtags": ["#DeepSeek", "#EnterpriseAI", "#CloudSavings"],
+                "supporting_posts": [],
+            },
+            "niche": "Enterprise AI & Cloud Infrastructure",
+            "persona": {
+                "type": "business",
+                "tone": "authoritative and data-driven",
+                "target_audience": "CTOs and VP Engineering",
+                "risk_tolerance": "medium",
+                "primary_goal": "roas",
+            },
+            "verdict": {
+                "verdict_status": "approved",
+                "suitability_score": 96.5,
+                "reasoning": "High-intent B2B audience seeking immediate cloud margin optimization.",
+                "strategic_angle": "Focus on audited invoice screenshots and latency benchmarks",
+            },
+            "total_budget": 1500.0,
+        }
+
+        # 1. Initialize with pure ValidationHandoffBundle
+        init_res = client.post("/api/v1/optimize/init", json=bundle_payload)
+        assert init_res.status_code == 200
+        init_data = init_res.json()
+        camp_id = init_data["campaign_id"]
+        gen0 = init_data["generation"]
+        candidates = gen0["active_candidates"]
+
+        assert len(candidates) == 12  # default population size
+        assert gen0["generation"] == 0
+
+        # Verify recommended hooks are utilized in candidate posts
+        rec_hooks = bundle_payload["selected_trend"]["recommended_hooks"]
+        candidate_hooks = [c["post"]["hook"] for c in candidates]
+        assert any(h in rec_hooks for h in candidate_hooks), "At least one candidate must use a recommended hook"
+
+        # Verify strategic angle is incorporated in visual asset prompts
+        strategic_angle = bundle_payload["verdict"]["strategic_angle"]
+        visual_prompts = [c["post"]["visual_asset_prompt"] for c in candidates]
+        assert any(strategic_angle in vp for vp in visual_prompts), "Strategic angle must appear in visual prompts"
+
+        # Verify budget conservation in Gen 0
+        total_allocated_gen0 = sum(c["budget"]["daily_budget"] for c in candidates)
+        assert total_allocated_gen0 <= 1500.0
+        assert abs(total_allocated_gen0 - 1500.0) <= 0.01
+
+        # 2. Step to Generation 1
+        step_res = client.post("/api/v1/optimize/step", json={"campaign_id": camp_id})
+        assert step_res.status_code == 200
+        step_data = step_res.json()
+        gen1 = step_data["generation"]
+        assert gen1["generation"] == 1
+        gen1_cands = gen1["active_candidates"]
+
+        # Budget conservation in Gen 1
+        total_allocated_gen1 = sum(c["budget"]["daily_budget"] for c in gen1_cands)
+        assert total_allocated_gen1 <= 1500.0
+        assert abs(total_allocated_gen1 - 1500.0) <= 0.01
+
+        # 3. Status check confirms trend and niche metadata
+        status_res = client.get(f"/api/v1/optimize/status/{camp_id}")
+        assert status_res.status_code == 200
+        status_data = status_res.json()
+        assert status_data["trend_name"] == "DeepSeek R1 Cost Arbitrage"
+        assert status_data["niche"] == "Enterprise AI & Cloud Infrastructure"
+        assert len(status_data["pareto_optimal_candidates"]) >= 1
+
+    def test_wrapped_validation_handoff_with_supporting_posts(self):
+        """Test POST /api/v1/optimize/init with wrapped validation_handoff and supporting posts."""
+        wrapped_payload = {
+            "validation_handoff": {
+                "selected_trend": {
+                    "trend_id": "trend_creator_burnout",
+                    "trend_name": "Solopreneur Burnout Confessions",
+                    "summary": "Founders sharing raw vulnerability about work hours",
+                    "keywords": ["Burnout", "Solopreneur", "Work Life Balance"],
+                    "recommended_hooks": ["I worked 80 hours a week for 2 years until this happened"],
+                    "recommended_formats": ["short_form_video"],
+                    "hashtags": ["#burnout", "#solopreneur"],
+                    "supporting_posts": [
+                        {
+                            "id": "tiktok_burnout_viral",
+                            "source": "tiktok",
+                            "hook": "Why I deleted my 100k follower account",
+                            "caption_body": "Mental health over metrics.",
+                            "call_to_action": "Read full essay in bio",
+                            "visual_asset_prompt": "Talking head, natural sunlight",
+                            "hashtags": ["#burnout"],
+                            "target_platform": "TikTok",
+                            "metrics": {
+                                "impressions": 100000,
+                                "clicks": 8000,
+                                "ctr": 0.08,
+                                "engagement_rate": 0.15,
+                                "conversions": 120,
+                                "spend": 300.0,
+                                "cpc": 0.04,
+                                "cac": 2.50,
+                                "roas": 8.0,
+                            },
+                        }
+                    ],
+                },
+                "niche": "Creator Economy",
+                "persona": {
+                    "type": "content_creator",
+                    "tone": "raw and candid",
+                    "target_audience": "Digital creators",
+                    "primary_goal": "engagement",
+                },
+                "verdict": {
+                    "verdict_status": "strong_match",
+                    "suitability_score": 98.0,
+                    "reasoning": "Direct alignment with creator vulnerability trends.",
+                    "strategic_angle": "Use raw iPhone selfie video style",
+                },
+                "total_budget": 800.0,
+            },
+            "config": {"population_size": 6, "mutation_rate": 0.20},
+        }
+
+        res = client.post("/api/v1/optimize/init", json=wrapped_payload)
+        assert res.status_code == 200
+        data = res.json()
+        cands = data["generation"]["active_candidates"]
+        assert len(cands) == 6
+
+        # Supporting post should be ingested as seed candidate
+        seed_cands = [c for c in cands if c["origin"] == "client_seed"]
+        assert len(seed_cands) >= 1
+        assert seed_cands[0]["original_seed_id"] == "tiktok_burnout_viral"
+
+        # Check total budget
+        total_alloc = sum(c["budget"]["daily_budget"] for c in cands)
+        assert abs(total_alloc - 800.0) <= 0.01

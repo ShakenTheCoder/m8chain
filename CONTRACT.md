@@ -18,11 +18,46 @@ This document defines the interface between **Part 2 (`validation`)**, **Part 3 
 ## 2. Part 2 (`validation`) → Part 3 (`optimization`) Handoff
 
 ### Endpoint: `POST /api/v1/optimize/init`
-Initializes **Generation 0** candidate creatives. When incoming client TikToks and ads are supplied with observed metrics (`seed_posts`), the engine ingests their actual hooks, CTAs, visuals, and metrics, evaluates their fitness according to the user persona, and allocates initial budgets via performance weights (Softmax / UCB).
+Initializes **Generation 0** candidate creatives. Accepts the official Step 2 **Validation Handoff Bundle**, client TikTok posts/ads with historical metrics, or standard trend parameters.
 
 #### Supported Request Payloads
 
-##### Option A: Client TikTok & Paid Ads Seed Payload (Recommended)
+##### Option A: Official Step 2 Validation Handoff Bundle (Primary Contract)
+```json
+{
+  "selected_trend": {
+    "trend_id": "trend_pov_office_01",
+    "trend_name": "POV Office Satire & Corporate Relatability",
+    "summary": "Short-form video trend satirizing corporate meeting culture and startup burnout.",
+    "keywords": ["Office Humor", "Meeting Fatigue", "Remote Work Memes", "Tech Satire"],
+    "recommended_hooks": [
+      "POV: It's 4:58 PM on a Friday and your manager schedules an urgent sync 💀",
+      "Why 94% of remote workers are secretly multitasking during all-hands meetings",
+      "POV: You automated 80% of your job with 3 AI agents and nobody noticed"
+    ],
+    "recommended_formats": ["short_form_video", "carousel", "hook_text"],
+    "hashtags": ["#corporatelife", "#officememes", "#remotework", "#productivity"],
+    "supporting_posts": []
+  },
+  "niche": "Creator Economy & Work Culture",
+  "persona": {
+    "type": "content_creator",
+    "tone": "humorous and relatable",
+    "target_audience": "Tech Workers and Remote Employees",
+    "risk_tolerance": "high",
+    "primary_goal": "engagement"
+  },
+  "verdict": {
+    "verdict_status": "approved",
+    "suitability_score": 0.94,
+    "reasoning": "Strong viral engagement and watch-time affinity on TikTok/Instagram; young professionals have deep resonance with remote work comedy.",
+    "strategic_angle": "Focus on relatable burnout humor and quick-fix productivity hacks with dynamic kinetic subtitles."
+  },
+  "total_budget": 850.00
+}
+```
+
+##### Option B: Client TikTok & Paid Ads Seed Payload (Historical Telemetry Mode)
 ```json
 {
   "campaign_name": "Autonomous Multi-Agent Marketing Workflows",
@@ -82,7 +117,7 @@ Initializes **Generation 0** candidate creatives. When incoming client TikToks a
 }
 ```
 
-##### Option B: Abstract Trend / Validation Input Payload (Synthetic Fallback)
+##### Option C: Abstract Trend / Validation Input Payload (Synthetic Fallback)
 ```json
 {
   "trend_name": "Autonomous Multi-Agent Marketing Workflows",

@@ -1,7 +1,7 @@
 """Data contracts, schemas, and Pydantic models for the m8chain optimization engine.
 
 Defines genotypes, phenotypes, persona definitions, client seed ad contracts,
-budget allocations, and generation lifecycle summaries for Part 3 (Optimization).
+Step 2 Validation handoff bundle schemas, budget allocations, and generation lifecycle summaries.
 """
 
 from __future__ import annotations
@@ -137,11 +137,112 @@ class InputAdOrPost(BaseModel):
         return data
 
 
-class ValidationInput(BaseModel):
-    """Input contract for Part 3 (Optimization).
+class TrendElementGroup(BaseModel):
+    """Group of trend elements identified in Part 1 (Organ) and validated in Part 2."""
+    trend_id: str = Field(
+        default_factory=lambda: f"trend_{uuid.uuid4().hex[:8]}",
+        description="Unique trend identifier",
+    )
+    trend_name: str = Field(
+        ...,
+        description="Title of the validated trend (e.g. 'POV Office Satire', 'Autonomous AI Workflows')",
+    )
+    summary: Optional[str] = Field(
+        default=None,
+        description="Short summary or overview of the trend pattern",
+    )
+    keywords: List[str] = Field(
+        default_factory=list,
+        description="Key semantic keywords and topics associated with the trend",
+    )
+    recommended_hooks: List[str] = Field(
+        default_factory=list,
+        description="High-performing opening hooks recommended by validation stage",
+    )
+    recommended_formats: List[str] = Field(
+        default_factory=lambda: ["short_form_video", "carousel", "hook_text"],
+        description="Content formats suited for this trend",
+    )
+    hashtags: List[str] = Field(
+        default_factory=list,
+        description="Recommended hashtag collection",
+    )
+    supporting_posts: Optional[List[InputAdOrPost]] = Field(
+        default_factory=list,
+        description="Sample posts or TikToks supporting the trend (with or without historical metrics)",
+    )
 
-    Accepts validated trend/niche parameters alongside incoming client TikTok posts
-    and running ad creatives with their historical performance metrics.
+
+class ValidationVerdict(BaseModel):
+    """Validation stage verdict on persona suitability and positioning guidance."""
+    verdict_status: str = Field(
+        default="approved",
+        description="Suitability verdict status: 'approved', 'strong_match', 'caution', etc.",
+    )
+    suitability_score: float = Field(
+        default=0.92,
+        description="Numerical suitability score (0.0 to 1.0 or 0 to 100)",
+    )
+    reasoning: str = Field(
+        default="Trend exhibits strong engagement affinity with the persona audience and brand tone.",
+        description="Explanation for why this trend matches the user persona and niche",
+    )
+    strategic_angle: Optional[str] = Field(
+        default=None,
+        description="Actionable strategic direction (e.g., 'Focus on relatable burnout humor and quick-fix hacks')",
+    )
+
+
+class ValidationHandoffBundle(BaseModel):
+    """Official Step 2 (Validation) handoff bundle passed to Step 3 (Optimization)."""
+    campaign_id: Optional[str] = Field(
+        default=None,
+        description="Optional campaign ID from validation stage",
+    )
+    selected_trend: TrendElementGroup = Field(
+        ...,
+        description="User-selected winning trend and constituent elements",
+    )
+    niche: str = Field(
+        ...,
+        description="Industry niche (e.g., 'B2B MarTech & SaaS', 'Creator Economy')",
+    )
+    persona: Persona = Field(
+        ...,
+        description="Content creator or Business persona profile",
+    )
+    verdict: ValidationVerdict = Field(
+        default_factory=ValidationVerdict,
+        description="Suitability verdict and strategic positioning direction",
+    )
+    total_budget: float = Field(
+        default=1000.0,
+        gt=0.0,
+        description="Total campaign budget in USD allocated for ad spend",
+    )
+    seed_posts: Optional[List[InputAdOrPost]] = Field(
+        default_factory=list,
+        description="Optional supporting TikToks or ads with metrics passed forward from upstream stages",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_supporting_posts(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Sync seed_posts from selected_trend.supporting_posts if not explicitly set
+            selected_trend = data.get("selected_trend")
+            if isinstance(selected_trend, dict):
+                supp = selected_trend.get("supporting_posts")
+                if supp and not data.get("seed_posts"):
+                    data["seed_posts"] = supp
+        return data
+
+
+class ValidationInput(BaseModel):
+    """Unified internal contract for Part 3 (Optimization).
+
+    Accepts validated trend/niche parameters alongside incoming client TikTok posts,
+    running ads, and the official Step 2 ValidationHandoffBundle.
     """
     trend_id: str = Field(
         default_factory=lambda: f"trend_{uuid.uuid4().hex[:8]}",
@@ -171,6 +272,10 @@ class ValidationInput(BaseModel):
         default_factory=lambda: ["short_form_video", "carousel", "hook_text"],
         description="Recommended content formats from validation stage",
     )
+    recommended_hooks: List[str] = Field(
+        default_factory=list,
+        description="Recommended hooks provided in trend element group",
+    )
     total_budget: float = Field(
         default=1000.0,
         gt=0.0,
@@ -180,11 +285,45 @@ class ValidationInput(BaseModel):
         default_factory=list,
         description="Incoming client TikTok posts and running ads with historical performance",
     )
+    selected_trend: Optional[TrendElementGroup] = Field(
+        default=None,
+        description="Full trend element group if passed from validation bundle",
+    )
+    verdict: Optional[ValidationVerdict] = Field(
+        default=None,
+        description="Validation stage verdict and strategic angle",
+    )
+    strategic_angle: Optional[str] = Field(
+        default=None,
+        description="Strategic positioning direction for creative generation",
+    )
 
     @model_validator(mode="before")
     @classmethod
-    def sync_campaign_name(cls, data: Any) -> Any:
+    def sync_from_bundle_or_trend(cls, data: Any) -> Any:
         if isinstance(data, dict):
+            # Check if this is a ValidationHandoffBundle or has selected_trend
+            trend_obj = data.get("selected_trend")
+            if isinstance(trend_obj, dict):
+                data.setdefault("trend_id", trend_obj.get("trend_id") or f"trend_{uuid.uuid4().hex[:8]}")
+                data.setdefault("trend_name", trend_obj.get("trend_name"))
+                data.setdefault("campaign_name", trend_obj.get("trend_name"))
+                if "keywords" in trend_obj and not data.get("keywords"):
+                    data["keywords"] = trend_obj["keywords"]
+                if "recommended_formats" in trend_obj and not data.get("recommended_formats"):
+                    data["recommended_formats"] = trend_obj["recommended_formats"]
+                if "recommended_hooks" in trend_obj and not data.get("recommended_hooks"):
+                    data["recommended_hooks"] = trend_obj["recommended_hooks"]
+                if "supporting_posts" in trend_obj and not data.get("seed_posts"):
+                    data["seed_posts"] = trend_obj["supporting_posts"]
+
+            # Sync verdict
+            verdict_obj = data.get("verdict")
+            if isinstance(verdict_obj, dict):
+                if "strategic_angle" in verdict_obj and not data.get("strategic_angle"):
+                    data["strategic_angle"] = verdict_obj["strategic_angle"]
+
+            # Sync campaign_name and trend_name
             if "campaign_name" in data and ("trend_name" not in data or not data["trend_name"]):
                 data["trend_name"] = data["campaign_name"]
             elif "trend_name" in data and ("campaign_name" not in data or not data["campaign_name"]):
@@ -346,11 +485,17 @@ class InitCampaignRequest(BaseModel):
     @classmethod
     def resolve_payload(cls, data: Any) -> Any:
         if isinstance(data, dict):
-            if "validation_input" not in data:
-                # Wrap direct payload provided at root level
-                config = data.get("config")
-                validation_data = {k: v for k, v in data.items() if k != "config"}
-                return {"validation_input": validation_data, "config": config}
+            if "validation_input" in data:
+                return data
+
+            # Direct ValidationHandoffBundle or wrapped validation_handoff
+            if "validation_handoff" in data:
+                return {"validation_input": data["validation_handoff"], "config": data.get("config")}
+
+            # Direct fields (e.g. selected_trend, trend_name, campaign_name, or seed_posts)
+            config = data.get("config")
+            validation_data = {k: v for k, v in data.items() if k != "config"}
+            return {"validation_input": validation_data, "config": config}
         return data
 
 

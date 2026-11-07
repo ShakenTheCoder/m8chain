@@ -14,7 +14,10 @@ try:
         Platform,
         PostChromosome,
         PostMetrics,
+        TrendElementGroup,
+        ValidationHandoffBundle,
         ValidationInput,
+        ValidationVerdict,
     )
     from .engine import EvolutionaryOptimizationEngine
     from .budget import BudgetReallocator
@@ -33,7 +36,10 @@ except ImportError:
         Platform,
         PostChromosome,
         PostMetrics,
+        TrendElementGroup,
+        ValidationHandoffBundle,
         ValidationInput,
+        ValidationVerdict,
     )
     from engine import EvolutionaryOptimizationEngine
     from budget import BudgetReallocator
@@ -52,7 +58,10 @@ __all__ = [
     "Platform",
     "PostChromosome",
     "PostMetrics",
+    "TrendElementGroup",
+    "ValidationHandoffBundle",
     "ValidationInput",
+    "ValidationVerdict",
     "EvolutionaryOptimizationEngine",
     "BudgetReallocator",
     "MarketingPerformanceSimulator",

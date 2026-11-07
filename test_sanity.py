@@ -488,16 +488,22 @@ class TestFastAPIRoutes:
         assert "not found" in res_status.json()["detail"].lower()
 
     def test_web_dashboard_endpoints_serve_html(self):
-        """Test that GET / and GET /ui serve the Notion-style dashboard HTML."""
+        """Test that GET / and GET /ui serve the spacious Notion-style dashboard HTML."""
         res_root = client.get("/")
         assert res_root.status_code == 200
         assert "text/html" in res_root.headers.get("content-type", "")
         assert "m8chain Campaign Optimization Engine" in res_root.text
+        assert "Creative Graveyard & Elimination Log" in res_root.text
+        assert "Survived Creatives" in res_root.text
+        assert "Pruned / Killed" in res_root.text
+        assert "Selection Pressure" in res_root.text
+        assert "max-width: 1280px" in res_root.text
 
         res_ui = client.get("/ui")
         assert res_ui.status_code == 200
         assert "text/html" in res_ui.headers.get("content-type", "")
         assert "m8chain Campaign Optimization Engine" in res_ui.text
+        assert "Creative Graveyard & Elimination Log" in res_ui.text
 
     def test_metric_driven_seed_posts_evolution_cycle(self):
         """Test full evolutionary pipeline seeded directly from incoming client TikToks and ads."""

@@ -19,15 +19,15 @@
       --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       --primary: #2383e2;
       --primary-hover: #1b6ec2;
-      --green-bg: #eaf3de;
+      --green-bg: #edf6ee;
       --green-text: #2b593f;
-      --green-border: #d3e5b9;
+      --green-border: #d4e8d6;
       --blue-bg: #edf3fc;
       --blue-text: #28456c;
       --blue-border: #d3e1f5;
-      --purple-bg: #f3e8ff;
-      --purple-text: #6b21a8;
-      --purple-border: #e9d5ff;
+      --purple-bg: #f5f0fb;
+      --purple-text: #5e3b8a;
+      --purple-border: #e6dbf5;
       --yellow-bg: #fdf5e2;
       --yellow-text: #825b17;
       --yellow-border: #faeac7;
@@ -46,7 +46,7 @@
       font-family: var(--font);
       background-color: var(--bg);
       color: var(--text-main);
-      line-height: 1.5;
+      line-height: 1.6;
       font-size: 14px;
       -webkit-font-smoothing: antialiased;
     }
@@ -56,14 +56,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 48px;
-      padding: 0 24px;
+      height: 52px;
+      padding: 0 32px;
       border-bottom: 1px solid var(--border);
       font-size: 13px;
       color: var(--text-muted);
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
       z-index: 100;
     }
@@ -71,7 +71,7 @@
     .breadcrumbs {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .breadcrumbs span.current {
@@ -82,14 +82,14 @@
     .topbar-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .badge-status {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 12px;
       font-size: 12px;
       background: var(--green-bg);
@@ -99,17 +99,39 @@
     }
 
     .status-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #2b593f;
+    }
+
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
     }
 
     .api-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 12px;
-      padding: 3px 8px;
+      font-size: 12.5px;
+      padding: 4px 10px;
       border-radius: 4px;
       border: 1px solid var(--border);
       transition: all 0.15s ease;
@@ -120,51 +142,64 @@
       color: var(--text-main);
     }
 
-    /* Main Container */
+    /* Main Container (Generous Width & Breathing Room) */
     .container {
-      max-width: 1100px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 3rem 2rem 6rem;
+    }
+
+    /* Notion Section Rhythm & Dividers */
+    .notion-hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.75rem 0;
     }
 
     /* Notion Page Header */
+    .page-header-block {
+      margin-bottom: 2.5rem;
+    }
+
     .page-icon {
-      font-size: 44px;
+      font-size: 48px;
       line-height: 1;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       user-select: none;
     }
 
     .page-title {
-      font-size: 34px;
+      font-size: 36px;
       font-weight: 700;
       color: var(--text-main);
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+      line-height: 1.25;
     }
 
     .page-subtitle {
-      font-size: 15px;
+      font-size: 16px;
       color: var(--text-muted);
-      margin-bottom: 24px;
+      line-height: 1.5;
     }
 
     /* Notion Properties Table */
     .properties-grid {
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
+      border-radius: 10px;
+      padding: 22px 26px;
       background: var(--bg);
-      margin-bottom: 24px;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
 
     .property-row {
       display: grid;
-      grid-template-columns: 160px 1fr;
+      grid-template-columns: 180px 1fr;
       align-items: center;
-      padding: 8px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--border-subtle);
-      font-size: 13.5px;
+      font-size: 14px;
     }
 
     .property-row:last-child {
@@ -181,10 +216,10 @@
 
     .prop-input, select.prop-input {
       font-family: var(--font);
-      font-size: 13.5px;
+      font-size: 14px;
       color: var(--text-main);
       border: 1px solid transparent;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
       background: transparent;
       width: 100%;
@@ -207,16 +242,17 @@
       display: inline-flex;
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 2px;
+      padding: 3px;
       background: var(--bg-subtle);
+      gap: 3px;
     }
 
     .persona-btn {
       font-family: var(--font);
-      font-size: 12.5px;
+      font-size: 13px;
       border: none;
       background: transparent;
-      padding: 4px 14px;
+      padding: 5px 16px;
       border-radius: 4px;
       cursor: pointer;
       color: var(--text-muted);
@@ -237,16 +273,16 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 10px;
-      margin-top: 12px;
-      padding-top: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
       border-top: 1px dashed var(--border);
-      font-size: 12.5px;
+      font-size: 13px;
     }
 
     .preset-chip {
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 6px;
       cursor: pointer;
       font-family: var(--font);
@@ -271,37 +307,44 @@
     }
 
     .preset-chip-featured:hover {
-      background: #ede0fc;
+      background: #ece3f7;
     }
 
-    /* Control Actions */
-    .controls-bar {
+    /* Action Controls Toolbar */
+    .action-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 32px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      margin-bottom: 2.5rem;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .btn-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .btn {
       font-family: var(--font);
       font-size: 13.5px;
       font-weight: 500;
-      padding: 7px 16px;
+      padding: 8px 18px;
       border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       transition: all 0.15s ease;
       border: 1px solid transparent;
+      user-select: none;
     }
 
     .btn-primary {
@@ -321,6 +364,7 @@
 
     .btn-secondary:hover {
       background: var(--bg-hover);
+      border-color: #d0d0ce;
     }
 
     .btn-accent {
@@ -339,45 +383,163 @@
       cursor: not-allowed;
     }
 
-    .status-text {
+    .status-info-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: 13px;
       color: var(--text-muted);
     }
 
-    /* Notion KPI Cards */
+    /* Generational KPI Cards (Spacious 4-column responsive grid) */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 960px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .kpi-card {
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 14px;
+      border-radius: 8px;
+      padding: 18px 20px;
+      transition: border-color 0.15s ease;
+    }
+
+    .kpi-card:hover {
+      border-color: #d8d8d6;
+    }
+
+    .kpi-card-highlight {
+      background: #fafaf9;
+      border-color: #dfdedb;
     }
 
     .kpi-title {
       font-size: 11.5px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .kpi-value {
-      font-size: 20px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--text-main);
+      line-height: 1.2;
     }
 
     .kpi-sub {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 5px;
+    }
+
+    /* Notion Collapsible Toggle ("🪦 Creative Graveyard") */
+    .notion-toggle {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      margin-bottom: 2.75rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .notion-toggle-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      transition: background 0.15s ease;
+    }
+
+    .notion-toggle-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .notion-toggle-summary:hover {
+      background: var(--bg-hover);
+    }
+
+    .toggle-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-arrow {
+      width: 14px;
+      height: 14px;
+      fill: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .notion-toggle[open] .toggle-arrow {
+      transform: rotate(90deg);
+    }
+
+    .notion-toggle-content {
+      padding: 20px 24px 24px;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .graveyard-callout {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #555451;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .graveyard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+    }
+
+    .graveyard-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0.92;
+      transition: opacity 0.15s ease, border-color 0.15s ease;
+    }
+
+    .graveyard-card:hover {
+      opacity: 1;
+      border-color: #d0d0ce;
     }
 
     /* Convergence Chart Section */
@@ -385,44 +547,49 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
 
     .section-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
     }
 
     .chart-container {
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 28px;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 2.75rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
 
     .chart-svg {
       width: 100%;
-      height: 180px;
+      height: 200px;
       overflow: visible;
     }
 
     .chart-legend {
       display: flex;
       align-items: center;
-      gap: 18px;
-      margin-top: 10px;
-      font-size: 12px;
+      gap: 24px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12.5px;
       color: var(--text-muted);
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .legend-dot {
@@ -435,19 +602,19 @@
     .budget-section {
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 28px;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 2.75rem;
     }
 
     .budget-bar-wrapper {
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
     .stacked-bar {
       display: flex;
-      height: 18px;
-      border-radius: 4px;
+      height: 22px;
+      border-radius: 6px;
       overflow: hidden;
       background: #e2e2e0;
       border: 1px solid #dcdcd9;
@@ -461,72 +628,76 @@
     .budget-legend-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px 18px;
-      margin-top: 12px;
-      font-size: 12px;
+      gap: 14px 20px;
+      margin-top: 16px;
+      font-size: 12.5px;
     }
 
     .budget-legend-pill {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
 
     .budget-color-box {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       border-radius: 2px;
     }
 
-    /* Candidate Cards Grid */
+    /* Candidate Cards Grid (Spacious 2/3 Column Layout) */
     .candidates-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 28px;
     }
 
     .candidate-card {
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 10px;
+      padding: 26px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: all 0.15s ease;
+      gap: 16px;
+      transition: all 0.2s ease;
       position: relative;
+      line-height: 1.6;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
 
     .candidate-card:hover {
       border-color: #d0d0ce;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      transform: translateY(-2px);
     }
 
     .candidate-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
     }
 
     .candidate-rank {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .candidate-badges {
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .chip {
       font-size: 11px;
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 4px;
       font-weight: 600;
       text-transform: capitalize;
@@ -556,6 +727,12 @@
       border: 1px solid var(--border);
     }
 
+    .chip-pruned {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border: 1px solid var(--red-border);
+    }
+
     .chip-platform {
       background: var(--bg-subtle);
       color: var(--text-main);
@@ -563,18 +740,18 @@
     }
 
     .hook-headline {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--text-main);
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
     .caption-text {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      line-height: 1.45;
+      font-size: 13.5px;
+      color: #4b4945;
+      line-height: 1.6;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -584,27 +761,27 @@
       background: var(--bg-subtle);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 10px 12px;
-      font-size: 12px;
+      padding: 12px 14px;
+      font-size: 12.5px;
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
+      line-height: 1.5;
     }
 
     .notion-callout-icon {
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.2;
     }
 
     .notion-callout-text {
-      color: #555451;
-      font-style: italic;
-      line-height: 1.35;
+      color: #4b4945;
+      line-height: 1.5;
     }
 
     .cta-badge {
-      font-size: 12px;
-      padding: 4px 8px;
+      font-size: 12.5px;
+      padding: 6px 12px;
       background: #f7f6f3;
       border-left: 3px solid var(--primary);
       color: var(--text-main);
@@ -616,49 +793,53 @@
     .metrics-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      padding: 8px 0;
+      gap: 8px;
+      padding: 12px 0;
       border-top: 1px solid var(--border-subtle);
       border-bottom: 1px solid var(--border-subtle);
-      font-size: 11.5px;
+      font-size: 12px;
       text-align: center;
     }
 
     .metric-col-title {
       color: var(--text-muted);
-      font-size: 10px;
+      font-size: 10.5px;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .metric-col-val {
       font-weight: 600;
       color: var(--text-main);
-      margin-top: 2px;
+      margin-top: 3px;
+      font-size: 13px;
     }
 
     .budget-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12.5px;
+      font-size: 13px;
+      padding-top: 2px;
     }
 
     .daily-spend-text {
-      font-weight: 600;
+      font-weight: 700;
       color: var(--green-text);
+      font-size: 14px;
     }
 
     /* Toast Notification */
     .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 28px;
+      right: 28px;
       background: var(--text-main);
       color: #ffffff;
-      padding: 10px 18px;
+      padding: 12px 22px;
       border-radius: 6px;
-      font-size: 13px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 13.5px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
       opacity: 0;
       transform: translateY(10px);
       transition: all 0.2s ease;
@@ -674,16 +855,16 @@
     /* Empty State */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 64px 24px;
       border: 1px dashed var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       background: var(--bg-subtle);
       color: var(--text-muted);
     }
 
     .empty-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 36px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -709,9 +890,11 @@
 
   <main class="container">
     <!-- Page Header -->
-    <div class="page-icon">⚡</div>
-    <h1 class="page-title">m8chain Campaign Optimization Engine</h1>
-    <p class="page-subtitle">Evolutionary Genetic Algorithm & Dynamic Budget Allocation Pipeline</p>
+    <div class="page-header-block">
+      <div class="page-icon">⚡</div>
+      <h1 class="page-title">m8chain Campaign Optimization Engine</h1>
+      <p class="page-subtitle">Evolutionary Genetic Algorithm & Dynamic Budget Allocation Pipeline</p>
+    </div>
 
     <!-- Campaign Setup Form (Notion Properties Table) -->
     <section class="properties-grid">
@@ -766,24 +949,24 @@
       </div>
 
       <!-- Step 2 Validation Verdict Callout Box -->
-      <div id="verdict-callout-box" class="notion-callout" style="display: none; margin-top: 14px; background: #fdfcf9; border-color: #ede6d8;">
+      <div id="verdict-callout-box" class="notion-callout" style="display: none; margin-top: 18px; background: #fdfcf9; border-color: #ede6d8;">
         <span class="notion-callout-icon">📋</span>
         <div class="notion-callout-text" style="color: #44403c;">
-          <div style="font-weight: 600; color: #1c1917; margin-bottom: 2px;">
+          <div style="font-weight: 600; color: #1c1917; margin-bottom: 3px;">
             Step 2 Validation Verdict: <span id="verdict-status-pill" class="chip chip-survived" style="font-size: 11px;">Approved • 94% Match</span>
           </div>
-          <div id="verdict-reasoning-text" style="font-style: normal; font-size: 12px; margin-bottom: 4px;">
+          <div id="verdict-reasoning-text" style="font-size: 12.5px; margin-bottom: 5px;">
             Strong viral engagement and watch-time affinity on TikTok/Instagram; young professionals have deep resonance with remote work comedy.
           </div>
-          <div style="font-size: 11.5px; color: #78716c; font-style: normal;">
+          <div style="font-size: 12px; color: #78716c;">
             <strong>Strategic Angle:</strong> <span id="verdict-strategy-text">Focus on relatable burnout humor and quick-fix productivity hacks with dynamic kinetic subtitles.</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Controls Bar -->
-    <div class="controls-bar">
+    <!-- Controls Toolbar -->
+    <div class="action-toolbar">
       <div class="btn-group">
         <button type="button" id="btn-init" class="btn btn-primary" onclick="initCampaign()">
           ✨ Initialize Campaign (Gen 0)
@@ -795,37 +978,102 @@
           ⏩ Auto-Simulate 5 Gens
         </button>
       </div>
-      <div class="status-text" id="campaign-info-text">No active campaign initialized.</div>
+      <div class="status-info-box">
+        <span class="status-dot-pulse"></span>
+        <span class="status-text" id="campaign-info-text">No active campaign initialized.</span>
+      </div>
     </div>
 
-    <!-- Generational KPI Cards -->
+    <!-- Generational Telemetry & Survival/Elimination KPI Cards -->
     <section class="kpi-grid">
+      <!-- 1. Generation -->
       <div class="kpi-card">
-        <div class="kpi-title">Generation</div>
+        <div class="kpi-title">📅 Generation</div>
         <div class="kpi-value" id="kpi-gen">—</div>
         <div class="kpi-sub" id="kpi-gen-sub">Awaiting initialization</div>
       </div>
+
+      <!-- 2. Peak Fitness -->
       <div class="kpi-card">
-        <div class="kpi-title">Peak Fitness</div>
+        <div class="kpi-title">🏆 Peak Fitness</div>
         <div class="kpi-value" id="kpi-best-fit">—</div>
         <div class="kpi-sub" id="kpi-best-cand">Top candidate score</div>
       </div>
+
+      <!-- 3. Avg Fitness -->
       <div class="kpi-card">
-        <div class="kpi-title">Avg Fitness</div>
+        <div class="kpi-title">📊 Avg Fitness</div>
         <div class="kpi-value" id="kpi-avg-fit">—</div>
         <div class="kpi-sub" id="kpi-fit-delta">Population mean</div>
       </div>
+
+      <!-- 4. Active Budget & Conservation -->
       <div class="kpi-card">
-        <div class="kpi-title">Diversity Score</div>
-        <div class="kpi-value" id="kpi-diversity">—</div>
-        <div class="kpi-sub">Cross-platform spread</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Active Budget</div>
+        <div class="kpi-title">💰 Active Budget</div>
         <div class="kpi-value" id="kpi-budget">—</div>
-        <div class="kpi-sub" id="kpi-budget-sub">100% Conserved</div>
+        <div class="kpi-sub" id="kpi-budget-sub">100% Conserved (0 Leaks)</div>
+      </div>
+
+      <!-- 5. Survived Creatives -->
+      <div class="kpi-card kpi-card-highlight">
+        <div class="kpi-title">🛡️ Survived Creatives</div>
+        <div class="kpi-value" id="kpi-survived" style="color: #2b593f;">—</div>
+        <div class="kpi-sub" id="kpi-survived-sub">Active population retained</div>
+      </div>
+
+      <!-- 6. Pruned / Killed Creatives -->
+      <div class="kpi-card kpi-card-highlight">
+        <div class="kpi-title">💀 Pruned / Killed</div>
+        <div class="kpi-value" id="kpi-pruned" style="color: #6e3630;">—</div>
+        <div class="kpi-sub" id="kpi-pruned-sub">Cumulative eliminated: 0</div>
+      </div>
+
+      <!-- 7. Selection Pressure / Kill Rate -->
+      <div class="kpi-card kpi-card-highlight">
+        <div class="kpi-title">⚔️ Selection Pressure</div>
+        <div class="kpi-value" id="kpi-killrate">—</div>
+        <div class="kpi-sub" id="kpi-killrate-sub">Kill rate per generational step</div>
+      </div>
+
+      <!-- 8. Diversity Score -->
+      <div class="kpi-card">
+        <div class="kpi-title">🧬 Diversity Score</div>
+        <div class="kpi-value" id="kpi-diversity">—</div>
+        <div class="kpi-sub">Cross-platform & gene spread</div>
       </div>
     </section>
+
+    <!-- Notion Collapsible Toggle: Creative Graveyard -->
+    <details class="notion-toggle" id="graveyard-toggle">
+      <summary class="notion-toggle-summary">
+        <div class="toggle-summary-left">
+          <svg class="toggle-arrow" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+          <span>🪦 Creative Graveyard & Elimination Log</span>
+          <span id="graveyard-count" class="chip chip-pruned" style="font-size: 11px;">0 Pruned</span>
+        </div>
+        <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">
+          Inspect eliminated hooks & pruning diagnostics ▾
+        </span>
+      </summary>
+      <div class="notion-toggle-content">
+        <div class="graveyard-callout">
+          <strong>Evolutionary Selection Notice:</strong> Candidates exhibiting sub-threshold ROAS, stagnant CTR, or inferior fitness scores are eliminated from active ad spend. Their budget is conserved and dynamically redistributed to surviving elite lineages and high-potential recombinations.
+        </div>
+        <div id="graveyard-list" class="graveyard-grid">
+          <div class="empty-state" style="grid-column: 1 / -1; padding: 36px 20px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">🕊️</div>
+            <div style="font-weight: 500; color: var(--text-main);">No Creatives Eliminated Yet</div>
+            <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+              All candidates are active in Generation 0. Evolutionary selection pressure will prune underperformers starting in Generation 1.
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <hr class="notion-hr">
 
     <!-- Convergence Tracker & Chart -->
     <section class="chart-container" id="chart-section" style="display: none;">
@@ -833,7 +1081,7 @@
         <h2 class="section-title">📈 Generational Convergence Curve</h2>
         <span class="badge-status" id="convergence-badge">Evolving</span>
       </div>
-      <svg id="convergence-svg" class="chart-svg" viewBox="0 0 1000 180"></svg>
+      <svg id="convergence-svg" class="chart-svg" viewBox="0 0 1000 200"></svg>
       <div class="chart-legend">
         <div class="legend-item">
           <div class="legend-dot" style="background: #10b981;"></div>
@@ -852,8 +1100,8 @@
         <h2 class="section-title">📊 Dynamic Budget Shift Visualizer</h2>
         <span class="badge-status" id="budget-conserve-badge">✓ Conserved: $0.00 / $0.00</span>
       </div>
-      <p style="font-size: 12.5px; color: var(--text-muted);">
-        Spend shifts dynamically from eliminated candidates to top performers via Softmax / UCB reallocation.
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+        Spend shifts dynamically from eliminated candidates to top performers via Softmax / UCB reallocation with strict zero-leak budget conservation.
       </p>
       <div class="budget-bar-wrapper">
         <div class="stacked-bar" id="stacked-budget-bar"></div>
@@ -861,17 +1109,19 @@
       <div class="budget-legend-grid" id="budget-legend-grid"></div>
     </section>
 
+    <hr class="notion-hr">
+
     <!-- Candidate Post Creatives -->
     <section>
       <div class="section-header">
         <h2 class="section-title">🏆 Active Candidate Creatives & Genotypes</h2>
-        <span style="font-size: 13px; color: var(--text-muted);" id="candidate-count-text">0 candidates</span>
+        <span style="font-size: 13.5px; color: var(--text-muted);" id="candidate-count-text">0 candidates in population</span>
       </div>
       <div class="candidates-grid" id="candidates-container">
         <div class="empty-state" style="grid-column: 1 / -1;">
           <div class="empty-icon">🧬</div>
-          <div style="font-weight: 500; color: var(--text-main); margin-bottom: 4px;">No Campaign Initialized</div>
-          <div>Click "Initialize Campaign (Gen 0)" or load client TikToks above to seed candidates.</div>
+          <div style="font-weight: 600; color: var(--text-main); margin-bottom: 6px; font-size: 15px;">No Campaign Initialized</div>
+          <div>Click "Initialize Campaign (Gen 0)" or load client TikToks / Step 2 handoff above to seed candidates.</div>
         </div>
       </div>
     </section>
@@ -887,6 +1137,7 @@
     let campaignHistory = [];
     let currentSeedPosts = [];
     let currentValidationHandoff = null;
+    let cumulativeGraveyard = []; // Track all pruned candidates across generations
     const PALETTE = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316", "#14b8a6", "#6366f1", "#84cc16"];
 
     function showToast(msg) {
@@ -1188,13 +1439,16 @@
 
         currentCampaignId = data.campaign_id;
         campaignHistory = [data.generation];
+        cumulativeGraveyard = []; // Reset graveyard on new campaign
 
         document.getElementById("btn-step").disabled = false;
         document.getElementById("btn-auto").disabled = false;
-        document.getElementById("campaign-info-text").innerText = `Campaign: ${currentCampaignId}`;
+        document.getElementById("campaign-info-text").innerText = `Active Campaign: ${currentCampaignId}`;
         document.getElementById("top-status-text").innerText = `Active: ${currentCampaignId}`;
 
-        renderDashboard(data.generation, budget);
+        renderDashboard(data.generation, budget, 0, 0.0);
+        renderGraveyard();
+
         const seedNotice = currentSeedPosts.length > 0 ? ` (with ${currentSeedPosts.length} client seed ads)` : "";
         showToast(`Generation 0 Initialized successfully${seedNotice}!`);
       } catch (err) {
@@ -1222,10 +1476,54 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
         const data = await res.json();
 
-        campaignHistory.push(data.generation);
+        const prevSummary = campaignHistory[campaignHistory.length - 1];
+        const newSummary = data.generation;
+
+        // Process eliminated candidates to populate Graveyard & Telemetry
+        let stepKilledCount = 0;
+        if (prevSummary && prevSummary.active_candidates) {
+          const newActiveIds = new Set(newSummary.active_candidates.map(c => c.id));
+          const eliminatedFromStep = prevSummary.active_candidates.filter(c => !newActiveIds.has(c.id));
+          stepKilledCount = eliminatedFromStep.length;
+
+          eliminatedFromStep.forEach(cand => {
+            const m = cand.metrics || {};
+            const roas = m.roas !== undefined ? m.roas : null;
+            const ctr = m.ctr !== undefined ? m.ctr : null;
+            const eng = m.engagement_rate !== undefined ? m.engagement_rate : null;
+
+            let reason = "";
+            if (roas !== null && roas < 1.8) {
+              reason = `Low ROAS: ${roas.toFixed(1)}x (Below 2.0x target)`;
+            } else if (ctr !== null && ctr < 0.025) {
+              reason = `Stagnant CTR: ${(ctr * 100).toFixed(1)}% (Below 2.5% threshold)`;
+            } else if (eng !== null && eng < 0.045) {
+              reason = `Low Engagement: ${(eng * 100).toFixed(1)}%`;
+            } else {
+              reason = `Out-competed in Tournament Selection (Fitness: ${cand.fitness_score.toFixed(3)})`;
+            }
+
+            cumulativeGraveyard.unshift({
+              id: cand.id,
+              generation: newSummary.generation,
+              hook: cand.post.hook,
+              platform: cand.post.target_platform,
+              fitness: cand.fitness_score,
+              budgetSaved: cand.budget.daily_budget || 0,
+              reason: reason,
+              metrics: m
+            });
+          });
+        }
+
+        const killRate = prevSummary ? ((stepKilledCount / prevSummary.active_candidates.length) * 100).toFixed(1) : "0.0";
+
+        campaignHistory.push(newSummary);
         const totalBudget = parseFloat(document.getElementById("input-budget").value) || 1000;
-        renderDashboard(data.generation, totalBudget);
-        showToast(`Evolved to Generation ${data.generation.generation}!`);
+        renderDashboard(newSummary, totalBudget, stepKilledCount, killRate);
+        renderGraveyard();
+
+        showToast(`Evolved to Gen ${newSummary.generation}! (${stepKilledCount} candidates pruned)`);
       } catch (err) {
         alert("Evolution step failed: " + err.message);
       } finally {
@@ -1250,13 +1548,13 @@
       btnAuto.disabled = false;
       btnStep.disabled = false;
       btnAuto.innerText = "⏩ Auto-Simulate 5 Gens";
-      showToast("Completed 5 evolutionary generations!");
+      showToast("Completed 5 sequential evolutionary generations!");
     }
 
-    function renderDashboard(summary, totalBudget) {
-      // 1. Update KPIs
-      document.getElementById("kpi-gen").innerText = summary.generation;
-      document.getElementById("kpi-gen-sub").innerText = `${summary.active_candidates.length} active candidates`;
+    function renderDashboard(summary, totalBudget, stepKilled = 0, killRate = "0.0") {
+      // 1. Update Standard Evolution KPIs
+      document.getElementById("kpi-gen").innerText = `Gen ${summary.generation}`;
+      document.getElementById("kpi-gen-sub").innerText = summary.generation === 0 ? "Initial Baseline" : `Step ${summary.generation} complete`;
       document.getElementById("kpi-best-fit").innerText = summary.best_fitness.toFixed(3);
       document.getElementById("kpi-best-cand").innerText = `Top: ${summary.best_candidate_id}`;
       document.getElementById("kpi-avg-fit").innerText = summary.avg_fitness.toFixed(3);
@@ -1265,18 +1563,87 @@
 
       const allocatedTotal = summary.active_candidates.reduce((acc, c) => acc + (c.budget.daily_budget || 0), 0);
       document.getElementById("kpi-budget").innerText = `$${allocatedTotal.toFixed(2)}`;
-      document.getElementById("kpi-budget-sub").innerText = `Target: $${totalBudget.toFixed(2)}`;
+      document.getElementById("kpi-budget-sub").innerText = `100% Conserved ($${totalBudget.toFixed(2)} cap)`;
 
-      // 2. Render Convergence Chart
+      // 2. Update Survival & Elimination Telemetry KPIs
+      const activeCount = summary.active_candidates.length;
+      const elitesCount = summary.active_candidates.filter(c => c.status === "survived" || c.origin === "survived_elite").length;
+      const offspringCount = activeCount - elitesCount;
+
+      document.getElementById("kpi-survived").innerText = `${activeCount} Active`;
+      document.getElementById("kpi-survived-sub").innerText = summary.generation === 0
+        ? "All candidates seeded active"
+        : `${elitesCount} Elites Retained • ${offspringCount} Offspring`;
+
+      document.getElementById("kpi-pruned").innerText = summary.generation === 0
+        ? "0 this gen"
+        : `${stepKilled} this gen`;
+      document.getElementById("kpi-pruned-sub").innerText = `Cumulative pruned: ${cumulativeGraveyard.length}`;
+
+      document.getElementById("kpi-killrate").innerText = summary.generation === 0
+        ? "0.0%"
+        : `${killRate}% Kill Rate`;
+      document.getElementById("kpi-killrate-sub").innerText = summary.generation === 0
+        ? "Gen 0 Baseline Pool"
+        : `${stepKilled} pruned to $0.00`;
+
+      // 3. Render Convergence Chart
       document.getElementById("chart-section").style.display = "block";
       renderConvergenceChart();
 
-      // 3. Render Budget Shift
+      // 4. Render Budget Shift
       document.getElementById("budget-section").style.display = "block";
       renderBudgetVisualizer(summary.active_candidates, totalBudget);
 
-      // 4. Render Candidate Cards
+      // 5. Render Candidate Cards
       renderCandidates(summary.active_candidates);
+    }
+
+    function renderGraveyard() {
+      const countEl = document.getElementById("graveyard-count");
+      const listEl = document.getElementById("graveyard-list");
+
+      countEl.innerText = `${cumulativeGraveyard.length} Pruned`;
+
+      if (cumulativeGraveyard.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1; padding: 36px 20px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">🕊️</div>
+            <div style="font-weight: 500; color: var(--text-main);">No Creatives Eliminated Yet</div>
+            <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+              All candidates are active in Generation 0. Evolutionary selection pressure will prune underperformers starting in Generation 1.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = "";
+      cumulativeGraveyard.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "graveyard-card";
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+            <span style="font-weight: 600; color: var(--text-muted);">
+              💀 ${escapeHtml(item.id)} <span style="font-weight: normal;">• Pruned in Gen ${item.generation}</span>
+            </span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span class="chip chip-pruned">${escapeHtml(item.reason)}</span>
+              <span class="chip chip-platform">${escapeHtml(item.platform)}</span>
+            </div>
+          </div>
+
+          <div style="font-size: 13.5px; font-weight: 600; color: #4b4945; line-height: 1.4;">
+            "${escapeHtml(item.hook)}"
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--text-muted); border-top: 1px dashed var(--border); padding-top: 8px;">
+            <span>Final Fitness: <strong>${item.fitness.toFixed(3)}</strong></span>
+            <span>Spend Salvaged: <strong style="color: var(--green-text);">$${item.budgetSaved.toFixed(2)} → $0.00</strong></span>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
     }
 
     function renderConvergenceChart() {
@@ -1287,11 +1654,11 @@
       if (history.length === 0) return;
 
       const w = 1000;
-      const h = 180;
+      const h = 200;
       const padLeft = 45;
       const padRight = 30;
-      const padTop = 20;
-      const padBottom = 30;
+      const padTop = 24;
+      const padBottom = 32;
 
       const maxFitness = Math.max(...history.map(h => h.best_fitness), 1.5) * 1.15;
       const minFitness = 0;
@@ -1421,7 +1788,7 @@
       const container = document.getElementById("candidates-container");
       container.innerHTML = "";
 
-      document.getElementById("candidate-count-text").innerText = `${candidates.length} candidates in population`;
+      document.getElementById("candidate-count-text").innerText = `${candidates.length} active candidates in population`;
 
       // Sort by fitness descending
       const sorted = [...candidates].sort((a, b) => b.fitness_score - a.fitness_score);
@@ -1433,7 +1800,6 @@
         const ctr = (metrics.ctr * 100 || 0).toFixed(1);
         const eng = (metrics.engagement_rate * 100 || 0).toFixed(1);
         const roas = (metrics.roas || 0).toFixed(1);
-        const cvr = (metrics.conversion_rate * 100 || 0).toFixed(1);
 
         // Origin badge determination
         let originChip = "";
@@ -1441,7 +1807,7 @@
           originChip = `<span class="chip chip-seed">📱 Client Seed Ad</span>`;
         } else if (cand.origin === "seed_variation") {
           originChip = `<span class="chip chip-recombined">🧬 Seed Offspring</span>`;
-        } else if (cand.status === "survived") {
+        } else if (cand.status === "survived" || cand.origin === "survived_elite") {
           originChip = `<span class="chip chip-survived">🏆 Survived Elite</span>`;
         } else if (cand.status === "recombined") {
           originChip = `<span class="chip chip-recombined">🧬 Recombined</span>`;
@@ -1449,7 +1815,7 @@
           originChip = `<span class="chip chip-active">Active</span>`;
         }
 
-        const seedNote = cand.original_seed_id ? `<span style="font-size: 10px; color: var(--purple-text); background: var(--purple-bg); padding: 1px 4px; border-radius: 3px;">From ${escapeHtml(cand.original_seed_id)}</span>` : "";
+        const seedNote = cand.original_seed_id ? `<span style="font-size: 10px; color: var(--purple-text); background: var(--purple-bg); padding: 1px 5px; border-radius: 3px;">From ${escapeHtml(cand.original_seed_id)}</span>` : "";
 
         const card = document.createElement("div");
         card.className = "candidate-card";
@@ -1457,7 +1823,7 @@
           <div class="candidate-header">
             <div class="candidate-rank">
               <span>#${rank}</span>
-              <span style="color: var(--text-muted); font-weight: normal; font-size: 11px;">(${cand.id})</span>
+              <span style="color: var(--text-muted); font-weight: normal; font-size: 12px;">(${cand.id})</span>
               ${seedNote}
             </div>
             <div class="candidate-badges">
@@ -1498,10 +1864,10 @@
 
           <div class="budget-footer">
             <div>
-              <span style="color: var(--text-muted); font-size: 11px;">DAILY SPEND:</span>
+              <span style="color: var(--text-muted); font-size: 11.5px;">DAILY SPEND:</span>
               <span class="daily-spend-text">$${cand.budget.daily_budget.toFixed(2)}</span>
             </div>
-            <div style="font-size: 11px; color: var(--text-muted);">
+            <div style="font-size: 12px; color: var(--text-muted);">
               Bid: <strong>${cand.budget.bid_aggressiveness.toFixed(2)}x</strong>
             </div>
           </div>

@@ -8,14 +8,11 @@ import json
 import logging
 import re
 import sqlite3
-from threading import RLock
 
 from .models import Analysis, AnalyzeRequest
-from .llm_trends import METHOD, configuration, extract_trends, TrendUnavailable
+from .trends import METHOD, extract_trends
 from .video_graph import GRAPH_METHOD, extract_graph
 
-
-_snapshot_lock = RLock()
 
 def video_id_from_url(url: str) -> str | None:
     match = re.search(r"/video/(\d+)(?:/)?$", url)
@@ -146,36 +143,28 @@ class AnalysisStore:
         return [json.loads(row[0]) for row in rows], total
 
     def trend_snapshot(self) -> dict:
-        """Cache reviewed concepts; model calls never hold the SQLite write lock."""
+        """Publish one persisted snapshot per database revision; GETs reuse it."""
         def current(connection):
             row = connection.execute("SELECT revision, computed_revision, result FROM trend_state WHERE id=1").fetchone()
             result = json.loads(row[2]) if row[2] else None
-            valid = (row[0] == row[1] and result is not None and result.get("method") == METHOD
-                     and result.get("review_config") == configuration()
-                     and result.get("graph", {}).get("method") == GRAPH_METHOD)
+            valid = row[0] == row[1] and result is not None and result.get("method") == METHOD and result.get("graph", {}).get("method") == GRAPH_METHOD
             return row[0], result if valid else None
 
-        with _snapshot_lock:
-            for _ in range(3):
-                with self.connect() as connection:
-                    connection.execute("BEGIN")
-                    revision, cached = current(connection)
-                    if cached is not None:
-                        return cached
-                    records = [json.loads(row[0]) for row in connection.execute("SELECT result FROM analyses ORDER BY id")]
-                result = {**extract_trends(records), "total_saved_videos": len(records),
-                          "scan_limit": None, "truncated": False, "revision": revision,
-                          "review_config": configuration(),
-                          "updated_at": datetime.now(timezone.utc).isoformat(), "update_trigger": "new_video_saved"}
-                result["graph"] = extract_graph(records)
-                with self.connect() as connection:
-                    connection.execute("BEGIN IMMEDIATE")
-                    latest, cached = current(connection)
-                    if cached is not None:
-                        return cached
-                    if latest != revision:
-                        continue
-                    connection.execute("UPDATE trend_state SET computed_revision=?, result=? WHERE id=1",
-                                       (revision, json.dumps(result, ensure_ascii=False)))
-                    return result
-        raise TrendUnavailable("The library changed repeatedly during concept review. Retry after new saves finish.")
+        with self.connect() as connection:
+            revision, result = current(connection)
+            if result is not None:
+                return result
+            # Serialize rebuilds and block concurrent inserts until publication.
+            # A second caller rechecks after acquiring the lock, avoiding duplicate work.
+            connection.execute("BEGIN IMMEDIATE")
+            revision, result = current(connection)
+            if result is not None:
+                return result
+            records, total = self.trend_records(limit=None)
+            result = {**extract_trends(records), "total_saved_videos": total,
+                      "scan_limit": None, "truncated": False, "revision": revision,
+                      "updated_at": datetime.now(timezone.utc).isoformat(), "update_trigger": "new_video_saved"}
+            result["graph"] = extract_graph(records)
+            connection.execute("UPDATE trend_state SET computed_revision=?, result=? WHERE id=1",
+                               (revision, json.dumps(result, ensure_ascii=False)))
+            return result

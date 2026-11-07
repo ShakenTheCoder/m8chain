@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse
 from .models import Analysis, AnalyzeRequest
 from .pipeline import AnalysisError, Settings, analyze
 from .storage import AnalysisStore, video_id_from_url
-from .llm_trends import Trend, TrendUnavailable
+from .trends import Trend
 from .semantic import SemanticUnavailable
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -153,7 +153,7 @@ def trend_schema():
 def list_trends():
     try:
         return {key: value for key, value in store().trend_snapshot().items() if key != "graph"}
-    except (SemanticUnavailable, TrendUnavailable) as error:
+    except SemanticUnavailable as error:
         raise HTTPException(503, str(error)) from None
 
 
@@ -161,6 +161,6 @@ def list_trends():
 def video_graph():
     try:
         snapshot = store().trend_snapshot()
-    except (SemanticUnavailable, TrendUnavailable) as error:
+    except SemanticUnavailable as error:
         raise HTTPException(503, str(error)) from None
     return {**snapshot["graph"], "revision": snapshot["revision"], "updated_at": snapshot["updated_at"]}

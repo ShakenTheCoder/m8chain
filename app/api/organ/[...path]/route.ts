@@ -27,7 +27,7 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
       headers: { "Content-Type": "application/json" },
       body,
       cache: "no-store",
-      signal: AbortSignal.timeout(target === "trends" || target === "graph" ? 620000 : 15000),
+      signal: AbortSignal.timeout(15000),
     });
     return new Response(await response.text(), {
       status: response.status,

@@ -85,7 +85,6 @@ def test_trends_endpoint_reads_saved_records_and_exports_schema(monkeypatch, tmp
         for index in [1, 2]:
             saved = record(str(index))
             saved.elements.sound.id = 'shared-audio'
-            saved.elements.transcript.text = 'A repeated specific creative setup'
             main.store().save(saved, {}, saved.video.url, 1)
         response = client.get('/trends')
         assert response.status_code == 200
@@ -132,7 +131,6 @@ def test_each_new_save_updates_trends_without_visiting_page_and_reads_reuse_snap
     monkeypatch.setattr(storage, 'extract_trends', compute)
     first, second = record('1'), record('2')
     first.elements.sound.id = second.elements.sound.id = 'same-sound'
-    first.elements.transcript.text = second.elements.transcript.text = 'A repeated specific creative setup'
     database.save(first, {}, first.video.url, 1)
     assert compute.call_count == 1
     # Read the persisted snapshot directly: no page/GET has triggered the rebuild.
@@ -187,7 +185,6 @@ def test_concurrent_saves_publish_latest_revision_without_lost_videos(tmp_path):
     records = [record('1'), record('2')]
     for item in records:
         item.elements.sound.id = 'same'
-        item.elements.transcript.text = 'A repeated specific creative setup'
     with ThreadPoolExecutor(max_workers=2) as executor:
         futures = [executor.submit(database.save, item, {}, item.video.url, 1) for item in records]
         for future in futures:

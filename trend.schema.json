@@ -1,0 +1,272 @@
+{
+  "$defs": {
+    "Evidence": {
+      "properties": {
+        "signal": {
+          "enum": [
+            "sound",
+            "script",
+            "subtitles",
+            "caption",
+            "visual"
+          ],
+          "title": "Signal",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "clip_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Clip Ids",
+          "type": "array"
+        },
+        "similarity": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Similarity",
+          "type": "number"
+        },
+        "strength": {
+          "default": "strong",
+          "enum": [
+            "strong",
+            "weak"
+          ],
+          "title": "Strength",
+          "type": "string"
+        },
+        "lexical_similarity": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lexical Similarity"
+        },
+        "semantic_similarity": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Similarity"
+        },
+        "basis": {
+          "default": "wording",
+          "enum": [
+            "sound",
+            "wording",
+            "meaning",
+            "both"
+          ],
+          "title": "Basis",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signal",
+        "value",
+        "clip_ids",
+        "similarity"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Guide": {
+      "properties": {
+        "specific_to_trend": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Specific To Trend",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "can_adapt": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Can Adapt",
+          "type": "array"
+        },
+        "review_before_posting": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Review Before Posting",
+          "type": "array"
+        }
+      },
+      "required": [
+        "specific_to_trend",
+        "steps",
+        "can_adapt",
+        "review_before_posting"
+      ],
+      "title": "Guide",
+      "type": "object"
+    },
+    "TrendClip": {
+      "properties": {
+        "analysis_id": {
+          "title": "Analysis Id",
+          "type": "string"
+        },
+        "video_id": {
+          "title": "Video Id",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "caption": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Caption"
+        },
+        "creator_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Creator Id"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "video_id",
+        "url"
+      ],
+      "title": "TrendClip",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "classification": {
+      "enum": [
+        "sound",
+        "script",
+        "subtitles",
+        "caption",
+        "visual",
+        "mixed"
+      ],
+      "title": "Classification",
+      "type": "string"
+    },
+    "status": {
+      "const": "candidate",
+      "default": "candidate",
+      "title": "Status",
+      "type": "string"
+    },
+    "method": {
+      "default": "shared-elements-v8-supported-cues",
+      "title": "Method",
+      "type": "string"
+    },
+    "matching_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Matching Score",
+      "type": "number"
+    },
+    "signal_weights": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Signal Weights",
+      "type": "object"
+    },
+    "creator_count": {
+      "title": "Creator Count",
+      "type": "integer"
+    },
+    "clips": {
+      "items": {
+        "$ref": "#/$defs/TrendClip"
+      },
+      "title": "Clips",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "execution_guide": {
+      "$ref": "#/$defs/Guide"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "classification",
+    "matching_score",
+    "creator_count",
+    "clips",
+    "evidence",
+    "execution_guide",
+    "limitations"
+  ],
+  "title": "Trend",
+  "type": "object"
+}

@@ -1,0 +1,1087 @@
+{
+  "$defs": {
+    "Classifier": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "laya",
+          "default": "laya",
+          "title": "Name",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "status": {
+          "default": "skipped",
+          "enum": [
+            "complete",
+            "skipped",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "taxonomy_version": {
+          "const": "marketing-v1",
+          "default": "marketing-v1",
+          "title": "Taxonomy Version",
+          "type": "string"
+        },
+        "input_truncated": {
+          "default": false,
+          "title": "Input Truncated",
+          "type": "boolean"
+        },
+        "min_confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "min_confidence"
+      ],
+      "title": "Classifier",
+      "type": "object"
+    },
+    "Collection": {
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "collected_at": {
+          "title": "Collected At",
+          "type": "string"
+        },
+        "discovery_queries": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Discovery Queries",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "collected_at"
+      ],
+      "title": "Collection",
+      "type": "object"
+    },
+    "ContentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "method": {
+          "const": "visual_summary_and_verbatim_text",
+          "default": "visual_summary_and_verbatim_text",
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "title": "ContentDescription",
+      "type": "object"
+    },
+    "Decision": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "probabilities": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Probabilities",
+          "type": "object"
+        },
+        "needs_review": {
+          "title": "Needs Review",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label",
+        "confidence",
+        "probabilities",
+        "needs_review"
+      ],
+      "title": "Decision",
+      "type": "object"
+    },
+    "Elements": {
+      "additionalProperties": false,
+      "properties": {
+        "post_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Post Description"
+        },
+        "hashtags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Hashtags",
+          "type": "array"
+        },
+        "transcript": {
+          "$ref": "#/$defs/Transcript"
+        },
+        "sound": {
+          "$ref": "#/$defs/Sound"
+        },
+        "on_screen_text": {
+          "$ref": "#/$defs/OnScreenText"
+        },
+        "text_sequences": {
+          "items": {
+            "$ref": "#/$defs/TextSequence"
+          },
+          "title": "Text Sequences",
+          "type": "array"
+        },
+        "numeric_expressions": {
+          "items": {
+            "$ref": "#/$defs/NumericExpression"
+          },
+          "title": "Numeric Expressions",
+          "type": "array"
+        }
+      },
+      "title": "Elements",
+      "type": "object"
+    },
+    "Features": {
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Decision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hook_type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Decision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "format": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Decision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "call_to_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Decision"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "opening_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opening Text"
+        },
+        "evidence_sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Sources",
+          "type": "array"
+        }
+      },
+      "title": "Features",
+      "type": "object"
+    },
+    "Frame": {
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "timestamp_seconds": {
+          "title": "Timestamp Seconds",
+          "type": "number"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "asset_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Path"
+        }
+      },
+      "required": [
+        "index",
+        "timestamp_seconds"
+      ],
+      "title": "Frame",
+      "type": "object"
+    },
+    "Language": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Code"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "source": {
+          "default": "unavailable",
+          "enum": [
+            "audio",
+            "unavailable"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "supported": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supported"
+        },
+        "allowed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed",
+          "type": "array"
+        }
+      },
+      "title": "Language",
+      "type": "object"
+    },
+    "MediaEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "default": "not_retained",
+          "enum": [
+            "retained",
+            "not_retained"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "video_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Path"
+        },
+        "video_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Sha256"
+        }
+      },
+      "title": "MediaEvidence",
+      "type": "object"
+    },
+    "NumericExpression": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "enum": [
+            "transcript",
+            "post_description",
+            "on_screen_text"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "compact_digits": {
+          "title": "Compact Digits",
+          "type": "string"
+        },
+        "start_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Seconds"
+        },
+        "match_hint_only": {
+          "const": true,
+          "default": true,
+          "title": "Match Hint Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "source",
+        "text",
+        "compact_digits"
+      ],
+      "title": "NumericExpression",
+      "type": "object"
+    },
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {
+          "title": "Observed At",
+          "type": "string"
+        },
+        "views": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Views"
+        },
+        "likes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Likes"
+        },
+        "shares": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shares"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comments"
+        },
+        "saves": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Saves"
+        },
+        "like_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Like Rate"
+        },
+        "share_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Share Rate"
+        }
+      },
+      "required": [
+        "observed_at"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "OnScreenText": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "default": "skipped",
+          "enum": [
+            "complete",
+            "unavailable",
+            "failed",
+            "skipped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/VisibleText"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "OnScreenText",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "properties": {
+        "start_seconds": {
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "title": "End Seconds",
+          "type": "number"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_seconds",
+        "end_seconds",
+        "text"
+      ],
+      "title": "Segment",
+      "type": "object"
+    },
+    "Sound": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Author"
+        },
+        "is_original": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Is Original"
+        }
+      },
+      "title": "Sound",
+      "type": "object"
+    },
+    "TextSequence": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "enum": [
+            "transcript",
+            "post_description",
+            "on_screen_text"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "normalized": {
+          "title": "Normalized",
+          "type": "string"
+        },
+        "folded": {
+          "title": "Folded",
+          "type": "string"
+        },
+        "tokens": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tokens",
+          "type": "array"
+        },
+        "start_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Seconds"
+        },
+        "end_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Seconds"
+        }
+      },
+      "required": [
+        "source",
+        "text",
+        "normalized",
+        "folded",
+        "tokens"
+      ],
+      "title": "TextSequence",
+      "type": "object"
+    },
+    "Transcript": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "default": "unavailable",
+          "enum": [
+            "complete",
+            "unavailable",
+            "failed",
+            "skipped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source": {
+          "const": "faster-whisper",
+          "default": "faster-whisper",
+          "title": "Source",
+          "type": "string"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/Segment"
+          },
+          "title": "Segments",
+          "type": "array"
+        }
+      },
+      "title": "Transcript",
+      "type": "object"
+    },
+    "Video": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "const": "tiktok",
+          "default": "tiktok",
+          "title": "Platform",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "creator_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Creator Id"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ],
+      "title": "Video",
+      "type": "object"
+    },
+    "VisibleText": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "frame_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Index"
+        },
+        "timestamp_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timestamp Seconds"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "VisibleText",
+      "type": "object"
+    },
+    "VisualAction": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "frame_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Frame Indices",
+          "type": "array"
+        },
+        "start_seconds": {
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "title": "End Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "description",
+        "frame_indices",
+        "start_seconds",
+        "end_seconds"
+      ],
+      "title": "VisualAction",
+      "type": "object"
+    },
+    "VisualAnalysis": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "default": "skipped",
+          "enum": [
+            "complete",
+            "unavailable",
+            "failed",
+            "skipped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "frames": {
+          "items": {
+            "$ref": "#/$defs/Frame"
+          },
+          "title": "Frames",
+          "type": "array"
+        },
+        "actions": {
+          "items": {
+            "$ref": "#/$defs/VisualAction"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "coverage": {
+          "const": "sampled_frames_only",
+          "default": "sampled_frames_only",
+          "title": "Coverage",
+          "type": "string"
+        },
+        "audio_delivery": {
+          "const": "not_analyzed",
+          "default": "not_analyzed",
+          "title": "Audio Delivery",
+          "type": "string"
+        },
+        "action_localization": {
+          "const": "not_analyzed",
+          "default": "not_analyzed",
+          "title": "Action Localization",
+          "type": "string"
+        }
+      },
+      "title": "VisualAnalysis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.2",
+      "default": "1.2",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "analysis_version": {
+      "const": "organ-mvp-2",
+      "default": "organ-mvp-2",
+      "title": "Analysis Version",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "status": {
+      "default": "partial",
+      "enum": [
+        "complete",
+        "partial",
+        "unsupported_language"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "video": {
+      "$ref": "#/$defs/Video"
+    },
+    "collection": {
+      "$ref": "#/$defs/Collection"
+    },
+    "language": {
+      "$ref": "#/$defs/Language"
+    },
+    "elements": {
+      "$ref": "#/$defs/Elements"
+    },
+    "description": {
+      "$ref": "#/$defs/ContentDescription"
+    },
+    "visual": {
+      "$ref": "#/$defs/VisualAnalysis"
+    },
+    "media_evidence": {
+      "$ref": "#/$defs/MediaEvidence"
+    },
+    "observation": {
+      "$ref": "#/$defs/Observation"
+    },
+    "features": {
+      "$ref": "#/$defs/Features"
+    },
+    "classifier": {
+      "$ref": "#/$defs/Classifier"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "video",
+    "collection",
+    "elements",
+    "observation",
+    "classifier"
+  ],
+  "title": "Analysis",
+  "type": "object"
+}

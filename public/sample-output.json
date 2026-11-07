@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.2",
+  "analysis_version": "organ-mvp-2",
+  "id": "illustrative-sample",
+  "status": "partial",
+  "video": {
+    "platform": "tiktok",
+    "id": "0000000000000000000",
+    "url": "https://www.tiktok.com/@example/video/0000000000000000000",
+    "creator_id": "example-creator",
+    "published_at": "2026-11-06T12:00:00Z",
+    "duration_seconds": 24.0
+  },
+  "collection": {
+    "run_id": "illustrative-sample",
+    "collected_at": "2026-11-07T12:00:00Z",
+    "discovery_queries": []
+  },
+  "language": {
+    "code": "ro",
+    "confidence": 0.95,
+    "source": "audio",
+    "supported": true,
+    "allowed": [
+      "en",
+      "ro"
+    ]
+  },
+  "elements": {
+    "post_description": "Când ajungi acasă după ore.",
+    "hashtags": [],
+    "transcript": {
+      "status": "complete",
+      "source": "faster-whisper",
+      "model": null,
+      "language": "ro",
+      "text": "Școala pulii!",
+      "segments": [
+        {
+          "start_seconds": 1.2,
+          "end_seconds": 2.4,
+          "text": "Școala pulii!"
+        }
+      ]
+    },
+    "sound": {
+      "id": null,
+      "title": null,
+      "author": null,
+      "is_original": null
+    },
+    "on_screen_text": {
+      "status": "skipped",
+      "source": null,
+      "items": []
+    },
+    "text_sequences": [
+      {
+        "source": "transcript",
+        "text": "Școala pulii!",
+        "normalized": "școala pulii!",
+        "folded": "scoala pulii!",
+        "tokens": [
+          "școala",
+          "pulii"
+        ],
+        "start_seconds": 1.2,
+        "end_seconds": 2.4
+      },
+      {
+        "source": "post_description",
+        "text": "Când ajungi acasă după ore.",
+        "normalized": "când ajungi acasă după ore.",
+        "folded": "cand ajungi acasa dupa ore.",
+        "tokens": [
+          "când",
+          "ajungi",
+          "acasă",
+          "după",
+          "ore"
+        ],
+        "start_seconds": null,
+        "end_seconds": null
+      }
+    ],
+    "numeric_expressions": []
+  },
+  "description": {
+    "text": "Speech transcript excerpt: «Școala pulii!».",
+    "sources": [
+      "transcript"
+    ],
+    "method": "visual_summary_and_verbatim_text"
+  },
+  "visual": {
+    "status": "skipped",
+    "model": null,
+    "summary": null,
+    "frames": [],
+    "actions": [],
+    "coverage": "sampled_frames_only",
+    "audio_delivery": "not_analyzed",
+    "action_localization": "not_analyzed"
+  },
+  "media_evidence": {
+    "status": "not_retained",
+    "video_path": null,
+    "video_sha256": null
+  },
+  "observation": {
+    "observed_at": "2026-11-07T12:00:00Z",
+    "views": 10000,
+    "likes": 800,
+    "shares": 120,
+    "comments": 35,
+    "saves": null,
+    "like_rate": 0.08,
+    "share_rate": 0.012
+  },
+  "features": {
+    "topic": null,
+    "hook_type": null,
+    "format": null,
+    "call_to_action": null,
+    "opening_text": null,
+    "evidence_sources": []
+  },
+  "classifier": {
+    "name": "laya",
+    "model": "convaiinnovations/laya-multilingual",
+    "status": "skipped",
+    "taxonomy_version": "marketing-v1",
+    "input_truncated": false,
+    "min_confidence": 0.6
+  },
+  "limitations": [
+    "illustrative_sample_not_a_live_analysis",
+    "classifier_not_run_for_this_sample",
+    "visual_model_not_run_for_this_sample",
+    "speech_is_an_illustrative_user_provided_example"
+  ]
+}

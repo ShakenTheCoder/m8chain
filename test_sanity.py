@@ -483,3 +483,15 @@ class TestFastAPIRoutes:
         res_status = client.get("/api/v1/optimize/status/camp_fake999")
         assert res_status.status_code == 404
         assert "not found" in res_status.json()["detail"].lower()
+
+    def test_web_dashboard_endpoints_serve_html(self):
+        """Test that GET / and GET /ui serve the Notion-style dashboard HTML."""
+        res_root = client.get("/")
+        assert res_root.status_code == 200
+        assert "text/html" in res_root.headers.get("content-type", "")
+        assert "n8chain Campaign Optimization Engine" in res_root.text
+
+        res_ui = client.get("/ui")
+        assert res_ui.status_code == 200
+        assert "text/html" in res_ui.headers.get("content-type", "")
+        assert "n8chain Campaign Optimization Engine" in res_ui.text

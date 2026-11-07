@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>n8chain — Evolutionary Campaign Optimizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-subtle: #f7f6f3;
+      --bg-hover: #f1f1ef;
+      --text-main: #37352f;
+      --text-muted: #787774;
+      --border: #e9e9e7;
+      --border-subtle: #f0f0ee;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --primary: #2383e2;
+      --primary-hover: #1b6ec2;
+      --green-bg: #eaf3de;
+      --green-text: #2b593f;
+      --green-border: #d3e5b9;
+      --blue-bg: #edf3fc;
+      --blue-text: #28456c;
+      --blue-border: #d3e1f5;
+      --yellow-bg: #fdf5e2;
+      --yellow-text: #825b17;
+      --yellow-border: #faeac7;
+      --red-bg: #fbe4e4;
+      --red-text: #6e3630;
+      --red-border: #f7cece;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Notion Header Navigation */
+    .notion-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumbs span.current {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      background: var(--green-bg);
+      color: var(--green-text);
+      border: 1px solid var(--green-border);
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2b593f;
+    }
+
+    .api-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+    }
+
+    .api-link:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Notion Page Header */
+    .page-icon {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+
+    .page-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Notion Properties Table */
+    .properties-grid {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      background: var(--bg);
+      margin-bottom: 24px;
+    }
+
+    .property-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13.5px;
+    }
+
+    .property-row:last-child {
+      border-bottom: none;
+    }
+
+    .prop-label {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .prop-input, select.prop-input {
+      font-family: var(--font);
+      font-size: 13.5px;
+      color: var(--text-main);
+      border: 1px solid transparent;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .prop-input:hover {
+      background: var(--bg-hover);
+    }
+
+    .prop-input:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.15);
+    }
+
+    /* Persona Toggle */
+    .persona-toggle-group {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px;
+      background: var(--bg-subtle);
+    }
+
+    .persona-btn {
+      font-family: var(--font);
+      font-size: 12.5px;
+      border: none;
+      background: transparent;
+      padding: 4px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .persona-btn.active {
+      background: #ffffff;
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      font-weight: 600;
+    }
+
+    /* Preset Buttons Callout */
+    .presets-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 12.5px;
+    }
+
+    .preset-chip {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 12.5px;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .preset-chip:hover {
+      background: var(--bg-hover);
+      border-color: #d0d0ce;
+    }
+
+    /* Control Actions */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+    }
+
+    .btn-accent {
+      background: var(--yellow-bg);
+      border: 1px solid var(--yellow-border);
+      color: var(--yellow-text);
+      font-weight: 600;
+    }
+
+    .btn-accent:hover {
+      background: #faeecf;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Notion KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .kpi-title {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Convergence Chart Section */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-container {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 28px;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 180px;
+      overflow: visible;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* Budget Conservation Visualizer */
+    .budget-section {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+
+    .budget-bar-wrapper {
+      margin-top: 12px;
+    }
+
+    .stacked-bar {
+      display: flex;
+      height: 18px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #e2e2e0;
+      border: 1px solid #dcdcd9;
+    }
+
+    .stacked-segment {
+      transition: width 0.3s ease;
+      position: relative;
+    }
+
+    .budget-legend-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .budget-legend-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .budget-color-box {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* Candidate Cards Grid */
+    .candidates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 16px;
+    }
+
+    .candidate-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .candidate-card:hover {
+      border-color: #d0d0ce;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transform: translateY(-1px);
+    }
+
+    .candidate-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .candidate-rank {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .candidate-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .chip-survived {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border: 1px solid var(--green-border);
+    }
+
+    .chip-recombined {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border: 1px solid var(--blue-border);
+    }
+
+    .chip-active {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .chip-platform {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .hook-headline {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .caption-text {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Notion Callout Block */
+    .notion-callout {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .notion-callout-icon {
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .notion-callout-text {
+      color: #555451;
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    .cta-badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      background: #f7f6f3;
+      border-left: 3px solid var(--primary);
+      color: var(--text-main);
+      font-weight: 500;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Metrics & Budget Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 8px 0;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 11.5px;
+      text-align: center;
+    }
+
+    .metric-col-title {
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .metric-col-val {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+
+    .budget-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+    }
+
+    .daily-spend-text {
+      font-weight: 600;
+      color: var(--green-text);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-main);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="notion-topbar">
+    <div class="breadcrumbs">
+      <span>📁 Workspace</span>
+      <span>/</span>
+      <span>n8chain</span>
+      <span>/</span>
+      <span class="current">⚡ Part 3: Evolutionary Optimization</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge-status">
+        <span class="status-dot"></span>
+        <span id="top-status-text">Engine Ready</span>
+      </span>
+      <a href="/docs" target="_blank" class="api-link">Swagger API Docs ↗</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Page Header -->
+    <div class="page-icon">⚡</div>
+    <h1 class="page-title">n8chain Campaign Optimization Engine</h1>
+    <p class="page-subtitle">Evolutionary Genetic Algorithm & Dynamic Budget Allocation Pipeline</p>
+
+    <!-- Campaign Setup Form (Notion Properties Table) -->
+    <section class="properties-grid">
+      <div class="property-row">
+        <div class="prop-label">🏷️ Selected Trend</div>
+        <input type="text" id="input-trend" class="prop-input" value="Autonomous Multi-Agent Marketing Workflows">
+      </div>
+      <div class="property-row">
+        <div class="prop-label">🎯 Target Niche</div>
+        <input type="text" id="input-niche" class="prop-input" value="B2B MarTech & SaaS">
+      </div>
+      <div class="property-row">
+        <div class="prop-label">🔑 Trend Keywords</div>
+        <input type="text" id="input-keywords" class="prop-input" value="AI Agent, Workflow Automation, Ad Optimization, Content Engine">
+      </div>
+      <div class="property-row">
+        <div class="prop-label">👤 User Persona</div>
+        <div class="persona-toggle-group">
+          <button type="button" id="btn-persona-business" class="persona-btn active" onclick="setPersona('business')">🏢 Business</button>
+          <button type="button" id="btn-persona-creator" class="persona-btn" onclick="setPersona('content_creator')">🎨 Content Creator</button>
+        </div>
+      </div>
+      <div class="property-row">
+        <div class="prop-label">🎯 Primary Goal</div>
+        <select id="input-goal" class="prop-input">
+          <option value="roas" selected>ROAS (Return on Ad Spend)</option>
+          <option value="conversions">Conversions & Leads</option>
+          <option value="engagement">Engagement & Shares</option>
+          <option value="reach">Reach & Attention</option>
+        </select>
+      </div>
+      <div class="property-row">
+        <div class="prop-label">💰 Total Budget ($)</div>
+        <input type="number" id="input-budget" class="prop-input" value="1000" min="50" step="50">
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div class="presets-bar">
+        <span style="color: var(--text-muted); font-weight: 500;">⚡ Quick Presets:</span>
+        <button type="button" class="preset-chip" onclick="loadPreset('business')">
+          🏢 B2B MarTech (Business • ROAS • $1,200)
+        </button>
+        <button type="button" class="preset-chip" onclick="loadPreset('creator')">
+          🎨 Creator Economy (Creator • Engagement • $750)
+        </button>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="btn-group">
+        <button type="button" id="btn-init" class="btn btn-primary" onclick="initCampaign()">
+          ✨ Initialize Campaign (Gen 0)
+        </button>
+        <button type="button" id="btn-step" class="btn btn-secondary" onclick="stepGeneration()" disabled>
+          🧬 Evolve Next Gen (+1)
+        </button>
+        <button type="button" id="btn-auto" class="btn btn-accent" onclick="autoSimulate()" disabled>
+          ⏩ Auto-Simulate 5 Gens
+        </button>
+      </div>
+      <div class="status-text" id="campaign-info-text">No active campaign initialized.</div>
+    </div>
+
+    <!-- Generational KPI Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Generation</div>
+        <div class="kpi-value" id="kpi-gen">—</div>
+        <div class="kpi-sub" id="kpi-gen-sub">Awaiting initialization</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Peak Fitness</div>
+        <div class="kpi-value" id="kpi-best-fit">—</div>
+        <div class="kpi-sub" id="kpi-best-cand">Top candidate score</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Avg Fitness</div>
+        <div class="kpi-value" id="kpi-avg-fit">—</div>
+        <div class="kpi-sub" id="kpi-fit-delta">Population mean</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Diversity Score</div>
+        <div class="kpi-value" id="kpi-diversity">—</div>
+        <div class="kpi-sub">Cross-platform spread</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Active Budget</div>
+        <div class="kpi-value" id="kpi-budget">—</div>
+        <div class="kpi-sub" id="kpi-budget-sub">100% Conserved</div>
+      </div>
+    </section>
+
+    <!-- Convergence Tracker & Chart -->
+    <section class="chart-container" id="chart-section" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">📈 Generational Convergence Curve</h2>
+        <span class="badge-status" id="convergence-badge">Evolving</span>
+      </div>
+      <svg id="convergence-svg" class="chart-svg" viewBox="0 0 1000 180"></svg>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #10b981;"></div>
+          <span>Peak Fitness (Elites)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #2563eb;"></div>
+          <span>Population Average</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Budget Allocation Visualizer -->
+    <section class="budget-section" id="budget-section" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">📊 Dynamic Budget Shift Visualizer</h2>
+        <span class="badge-status" id="budget-conserve-badge">✓ Conserved: $0.00 / $0.00</span>
+      </div>
+      <p style="font-size: 12.5px; color: var(--text-muted);">
+        Spend shifts dynamically from eliminated candidates to top performers via Softmax / UCB reallocation.
+      </p>
+      <div class="budget-bar-wrapper">
+        <div class="stacked-bar" id="stacked-budget-bar"></div>
+      </div>
+      <div class="budget-legend-grid" id="budget-legend-grid"></div>
+    </section>
+
+    <!-- Candidate Post Creatives -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">🏆 Active Candidate Creatives & Genotypes</h2>
+        <span style="font-size: 13px; color: var(--text-muted);" id="candidate-count-text">0 candidates</span>
+      </div>
+      <div class="candidates-grid" id="candidates-container">
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <div class="empty-icon">🧬</div>
+          <div style="font-weight: 500; color: var(--text-main); margin-bottom: 4px;">No Campaign Initialized</div>
+          <div>Click "Initialize Campaign (Gen 0)" above to seed candidates and distribute initial budgets.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Action performed successfully</div>
+
+  <script>
+    // App State
+    let currentCampaignId = null;
+    let currentPersona = "business";
+    let campaignHistory = [];
+    const PALETTE = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316", "#14b8a6", "#6366f1", "#84cc16"];
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function setPersona(type) {
+      currentPersona = type;
+      document.getElementById("btn-persona-business").classList.toggle("active", type === "business");
+      document.getElementById("btn-persona-creator").classList.toggle("active", type === "content_creator");
+      const goalSelect = document.getElementById("input-goal");
+      goalSelect.value = (type === "business") ? "roas" : "engagement";
+    }
+
+    function loadPreset(type) {
+      if (type === "business") {
+        document.getElementById("input-trend").value = "Autonomous Multi-Agent Marketing Workflows";
+        document.getElementById("input-niche").value = "B2B MarTech & SaaS";
+        document.getElementById("input-keywords").value = "AI Agent, Workflow Automation, Ad Optimization, Content Engine";
+        document.getElementById("input-budget").value = 1200;
+        setPersona("business");
+        showToast("Loaded 'B2B MarTech' Business Preset");
+      } else {
+        document.getElementById("input-trend").value = "Corporate Satire & Creator Economy";
+        document.getElementById("input-niche").value = "Creator Economy & Tech Culture";
+        document.getElementById("input-keywords").value = "Workplace Humor, Tech Startup Life, Burnout Memes, Slack Culture";
+        document.getElementById("input-budget").value = 750;
+        setPersona("content_creator");
+        showToast("Loaded 'Office Satire' Creator Preset");
+      }
+    }
+
+    async function initCampaign() {
+      const btnInit = document.getElementById("btn-init");
+      btnInit.disabled = true;
+      btnInit.innerText = "⏳ Initializing...";
+
+      const trend = document.getElementById("input-trend").value.trim();
+      const niche = document.getElementById("input-niche").value.trim();
+      const kw = document.getElementById("input-keywords").value.split(",").map(s => s.trim()).filter(Boolean);
+      const budget = parseFloat(document.getElementById("input-budget").value) || 1000;
+      const goal = document.getElementById("input-goal").value;
+
+      const payload = {
+        validation_input: {
+          trend_name: trend,
+          keywords: kw,
+          niche: niche,
+          persona: {
+            type: currentPersona,
+            tone: currentPersona === "business" ? "authoritative and cutting-edge" : "casual and authentic",
+            target_audience: currentPersona === "business" ? "Enterprise Marketers & Founders" : "Creators & Early Adopters",
+            risk_tolerance: "medium",
+            primary_goal: goal
+          },
+          recommended_formats: ["short_form_video", "carousel", "high_contrast_post"],
+          total_budget: budget
+        },
+        config: {
+          population_size: 10,
+          mutation_rate: 0.20,
+          elitism_ratio: 0.20,
+          tournament_size: 3
+        }
+      };
+
+      try {
+        const res = await fetch("/api/v1/optimize/init", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+        const data = await res.json();
+
+        currentCampaignId = data.campaign_id;
+        campaignHistory = [data.generation];
+
+        document.getElementById("btn-step").disabled = false;
+        document.getElementById("btn-auto").disabled = false;
+        document.getElementById("campaign-info-text").innerText = `Campaign: ${currentCampaignId}`;
+        document.getElementById("top-status-text").innerText = `Active: ${currentCampaignId}`;
+
+        renderDashboard(data.generation, budget);
+        showToast("Generation 0 Initialized successfully!");
+      } catch (err) {
+        alert("Initialization failed: " + err.message);
+      } finally {
+        btnInit.disabled = false;
+        btnInit.innerText = "✨ Initialize Campaign (Gen 0)";
+      }
+    }
+
+    async function stepGeneration() {
+      if (!currentCampaignId) return;
+
+      const btnStep = document.getElementById("btn-step");
+      btnStep.disabled = true;
+      btnStep.innerText = "⏳ Evolving...";
+
+      try {
+        const res = await fetch("/api/v1/optimize/step", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ campaign_id: currentCampaignId })
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+        const data = await res.json();
+
+        campaignHistory.push(data.generation);
+        const totalBudget = parseFloat(document.getElementById("input-budget").value) || 1000;
+        renderDashboard(data.generation, totalBudget);
+        showToast(`Evolved to Generation ${data.generation.generation}!`);
+      } catch (err) {
+        alert("Evolution step failed: " + err.message);
+      } finally {
+        btnStep.disabled = false;
+        btnStep.innerText = "🧬 Evolve Next Gen (+1)";
+      }
+    }
+
+    async function autoSimulate() {
+      if (!currentCampaignId) return;
+      const btnAuto = document.getElementById("btn-auto");
+      const btnStep = document.getElementById("btn-step");
+      btnAuto.disabled = true;
+      btnStep.disabled = true;
+
+      for (let i = 1; i <= 5; i++) {
+        btnAuto.innerText = `⏳ Simulating Gen ${campaignHistory.length}...`;
+        await stepGeneration();
+        await new Promise(r => setTimeout(r, 450));
+      }
+
+      btnAuto.disabled = false;
+      btnStep.disabled = false;
+      btnAuto.innerText = "⏩ Auto-Simulate 5 Gens";
+      showToast("Completed 5 evolutionary generations!");
+    }
+
+    function renderDashboard(summary, totalBudget) {
+      // 1. Update KPIs
+      document.getElementById("kpi-gen").innerText = summary.generation;
+      document.getElementById("kpi-gen-sub").innerText = `${summary.active_candidates.length} active candidates`;
+      document.getElementById("kpi-best-fit").innerText = summary.best_fitness.toFixed(3);
+      document.getElementById("kpi-best-cand").innerText = `Top: ${summary.best_candidate_id}`;
+      document.getElementById("kpi-avg-fit").innerText = summary.avg_fitness.toFixed(3);
+      document.getElementById("kpi-fit-delta").innerText = `Avg of Gen ${summary.generation}`;
+      document.getElementById("kpi-diversity").innerText = summary.diversity_score.toFixed(2);
+
+      const allocatedTotal = summary.active_candidates.reduce((acc, c) => acc + (c.budget.daily_budget || 0), 0);
+      document.getElementById("kpi-budget").innerText = `$${allocatedTotal.toFixed(2)}`;
+      document.getElementById("kpi-budget-sub").innerText = `Target: $${totalBudget.toFixed(2)}`;
+
+      // 2. Render Convergence Chart
+      document.getElementById("chart-section").style.display = "block";
+      renderConvergenceChart();
+
+      // 3. Render Budget Shift
+      document.getElementById("budget-section").style.display = "block";
+      renderBudgetVisualizer(summary.active_candidates, totalBudget);
+
+      // 4. Render Candidate Cards
+      renderCandidates(summary.active_candidates);
+    }
+
+    function renderConvergenceChart() {
+      const svg = document.getElementById("convergence-svg");
+      svg.innerHTML = "";
+
+      const history = campaignHistory;
+      if (history.length === 0) return;
+
+      const w = 1000;
+      const h = 180;
+      const padLeft = 45;
+      const padRight = 30;
+      const padTop = 20;
+      const padBottom = 30;
+
+      const maxFitness = Math.max(...history.map(h => h.best_fitness), 1.5) * 1.15;
+      const minFitness = 0;
+
+      const getX = (idx) => padLeft + (idx / Math.max(1, history.length - 1)) * (w - padLeft - padRight);
+      const getY = (val) => padTop + (1 - (val - minFitness) / (maxFitness - minFitness)) * (h - padTop - padBottom);
+
+      // Grid Lines
+      for (let i = 0; i <= 4; i++) {
+        const val = (maxFitness / 4) * i;
+        const y = getY(val);
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", padLeft);
+        line.setAttribute("x2", w - padRight);
+        line.setAttribute("y1", y);
+        line.setAttribute("y2", y);
+        line.setAttribute("stroke", "#f0f0ee");
+        line.setAttribute("stroke-dasharray", "3,3");
+        svg.appendChild(line);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", padLeft - 8);
+        text.setAttribute("y", y + 4);
+        text.setAttribute("text-anchor", "end");
+        text.setAttribute("font-size", "10");
+        text.setAttribute("fill", "#787774");
+        text.textContent = val.toFixed(1);
+        svg.appendChild(text);
+      }
+
+      // Build Paths
+      const bestPoints = history.map((h, i) => `${getX(i)},${getY(h.best_fitness)}`).join(" ");
+      const avgPoints = history.map((h, i) => `${getX(i)},${getY(h.avg_fitness)}`).join(" ");
+
+      const polyBest = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      polyBest.setAttribute("points", bestPoints);
+      polyBest.setAttribute("fill", "none");
+      polyBest.setAttribute("stroke", "#10b981");
+      polyBest.setAttribute("stroke-width", "3");
+      svg.appendChild(polyBest);
+
+      const polyAvg = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      polyAvg.setAttribute("points", avgPoints);
+      polyAvg.setAttribute("fill", "none");
+      polyAvg.setAttribute("stroke", "#2563eb");
+      polyAvg.setAttribute("stroke-width", "2");
+      polyAvg.setAttribute("stroke-dasharray", "4,4");
+      svg.appendChild(polyAvg);
+
+      // Dots on Points
+      history.forEach((h, i) => {
+        const cx = getX(i);
+        const cyBest = getY(h.best_fitness);
+        const cyAvg = getY(h.avg_fitness);
+
+        const circleBest = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circleBest.setAttribute("cx", cx);
+        circleBest.setAttribute("cy", cyBest);
+        circleBest.setAttribute("r", "5");
+        circleBest.setAttribute("fill", "#10b981");
+        svg.appendChild(circleBest);
+
+        const labelBest = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        labelBest.setAttribute("x", cx);
+        labelBest.setAttribute("y", cyBest - 8);
+        labelBest.setAttribute("text-anchor", "middle");
+        labelBest.setAttribute("font-size", "11");
+        labelBest.setAttribute("font-weight", "600");
+        labelBest.setAttribute("fill", "#065f46");
+        labelBest.textContent = h.best_fitness.toFixed(2);
+        svg.appendChild(labelBest);
+
+        const circleAvg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circleAvg.setAttribute("cx", cx);
+        circleAvg.setAttribute("cy", cyAvg);
+        circleAvg.setAttribute("r", "4");
+        circleAvg.setAttribute("fill", "#2563eb");
+        svg.appendChild(circleAvg);
+
+        // X Axis Gen label
+        const genLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        genLabel.setAttribute("x", cx);
+        genLabel.setAttribute("y", h - 8);
+        genLabel.setAttribute("text-anchor", "middle");
+        genLabel.setAttribute("font-size", "11");
+        genLabel.setAttribute("fill", "#787774");
+        genLabel.textContent = `G${h.generation}`;
+        svg.appendChild(genLabel);
+      });
+    }
+
+    function renderBudgetVisualizer(candidates, totalBudget) {
+      const bar = document.getElementById("stacked-budget-bar");
+      const legend = document.getElementById("budget-legend-grid");
+      bar.innerHTML = "";
+      legend.innerHTML = "";
+
+      const activeCands = candidates.filter(c => c.status !== "eliminated");
+      const totalAllocated = activeCands.reduce((acc, c) => acc + c.budget.daily_budget, 0);
+
+      document.getElementById("budget-conserve-badge").innerText =
+        `✓ Conserved: $${totalAllocated.toFixed(2)} / $${totalBudget.toFixed(2)}`;
+
+      activeCands.forEach((c, idx) => {
+        const color = PALETTE[idx % PALETTE.length];
+        const pct = ((c.budget.daily_budget / totalBudget) * 100).toFixed(1);
+
+        const seg = document.createElement("div");
+        seg.className = "stacked-segment";
+        seg.style.width = `${pct}%`;
+        seg.style.backgroundColor = color;
+        seg.title = `${c.id}: $${c.budget.daily_budget.toFixed(2)} (${pct}%)`;
+        bar.appendChild(seg);
+
+        const leg = document.createElement("div");
+        leg.className = "budget-legend-pill";
+        leg.innerHTML = `
+          <div class="budget-color-box" style="background: ${color};"></div>
+          <span style="font-weight: 500;">${c.id}</span>
+          <span style="color: var(--text-muted);">$${c.budget.daily_budget.toFixed(2)} (${pct}%)</span>
+        `;
+        legend.appendChild(leg);
+      });
+    }
+
+    function renderCandidates(candidates) {
+      const container = document.getElementById("candidates-container");
+      container.innerHTML = "";
+
+      document.getElementById("candidate-count-text").innerText = `${candidates.length} candidates in population`;
+
+      // Sort by fitness descending
+      const sorted = [...candidates].sort((a, b) => b.fitness_score - a.fitness_score);
+
+      sorted.forEach((cand, idx) => {
+        const rank = idx + 1;
+        const post = cand.post;
+        const metrics = cand.metrics || {};
+        const ctr = (metrics.ctr * 100 || 0).toFixed(1);
+        const eng = (metrics.engagement_rate * 100 || 0).toFixed(1);
+        const roas = (metrics.roas || 0).toFixed(1);
+        const cvr = (metrics.conversion_rate * 100 || 0).toFixed(1);
+
+        const statusClass = cand.status === "survived" ? "chip-survived" : (cand.status === "recombined" ? "chip-recombined" : "chip-active");
+        const statusLabel = cand.status === "survived" ? "🏆 Survived Elite" : (cand.status === "recombined" ? "🧬 Recombined" : "Active");
+
+        const card = document.createElement("div");
+        card.className = "candidate-card";
+        card.innerHTML = `
+          <div class="candidate-header">
+            <div class="candidate-rank">
+              <span>#${rank}</span>
+              <span style="color: var(--text-muted); font-weight: normal; font-size: 11px;">(${cand.id})</span>
+            </div>
+            <div class="candidate-badges">
+              <span class="chip ${statusClass}">${statusLabel}</span>
+              <span class="chip chip-platform">${post.target_platform}</span>
+            </div>
+          </div>
+
+          <div class="hook-headline">"${escapeHtml(post.hook)}"</div>
+
+          <div class="caption-text">${escapeHtml(post.caption_body)}</div>
+
+          <div class="notion-callout">
+            <span class="notion-callout-icon">🎨</span>
+            <div class="notion-callout-text"><strong>Adobe Visual Prompt:</strong> ${escapeHtml(post.visual_asset_prompt)}</div>
+          </div>
+
+          <div class="cta-badge">📣 ${escapeHtml(post.call_to_action)}</div>
+
+          <div class="metrics-row">
+            <div>
+              <div class="metric-col-title">Fitness</div>
+              <div class="metric-col-val" style="color: #065f46;">${cand.fitness_score.toFixed(3)}</div>
+            </div>
+            <div>
+              <div class="metric-col-title">CTR</div>
+              <div class="metric-col-val">${ctr}%</div>
+            </div>
+            <div>
+              <div class="metric-col-title">Eng Rate</div>
+              <div class="metric-col-val">${eng}%</div>
+            </div>
+            <div>
+              <div class="metric-col-title">ROAS</div>
+              <div class="metric-col-val">${roas}x</div>
+            </div>
+          </div>
+
+          <div class="budget-footer">
+            <div>
+              <span style="color: var(--text-muted); font-size: 11px;">DAILY SPEND:</span>
+              <span class="daily-spend-text">$${cand.budget.daily_budget.toFixed(2)}</span>
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted);">
+              Bid: <strong>${cand.budget.bid_aggressiveness.toFixed(2)}x</strong>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>

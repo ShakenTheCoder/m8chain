@@ -7,10 +7,13 @@ convergence curves and Pareto-optimal post candidates.
 
 from __future__ import annotations
 
+import os
 import uuid
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from budget import BudgetReallocator
@@ -44,6 +47,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+if os.path.isdir(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 class CampaignState(BaseModel):
     """In-memory state container for an active campaign."""
@@ -65,7 +72,16 @@ def get_engine(config: Optional[GAConfig] = None) -> EvolutionaryOptimizationEng
     return EvolutionaryOptimizationEngine(config=config)
 
 
-@app.get("/", tags=["Health"])
+@app.get("/", response_class=HTMLResponse, tags=["Web UI"])
+@app.get("/ui", response_class=HTMLResponse, tags=["Web UI"])
+def get_dashboard() -> HTMLResponse:
+    """Serve the Notion-style interactive Web UI dashboard."""
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return HTMLResponse("<h1>n8chain Optimization UI Not Found</h1>", status_code=404)
+
+
 @app.get("/health", tags=["Health"])
 def health_check() -> Dict[str, str]:
     """Health check endpoint confirming API service readiness."""

@@ -5,10 +5,12 @@ This document defines the interface between **Part 2 (`validation`)**, **Part 3 
 
 ---
 
-## 1. Service Overview
+## 1. Service Overview & Web Dashboard
 
-- **Base URL:** `http://localhost:8000`
+- **Web Dashboard:** `http://localhost:8000/` or `http://localhost:8000/ui`
+  - Notion-style interactive interface to inspect candidates, run single generation steps, or auto-simulate 5 generations with real-time budget redistribution and convergence charts.
 - **Swagger Docs:** `http://localhost:8000/docs`
+- **Health Check:** `http://localhost:8000/health`
 - **CORS:** Enabled for all origins (`*`) for frictionless local frontend development.
 
 ---

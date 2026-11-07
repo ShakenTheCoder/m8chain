@@ -1,4 +1,4 @@
-# n8chain API Contract & Integration Guide
+# m8chain API Contract & Integration Guide
 **Part 3: Evolutionary Optimization (`optimization` branch)**
 
 This document defines the interface between **Part 2 (`validation`)**, **Part 3 (`optimization`)**, and the **Next.js frontend application**.
@@ -18,15 +18,73 @@ This document defines the interface between **Part 2 (`validation`)**, **Part 3 
 ## 2. Part 2 (`validation`) → Part 3 (`optimization`) Handoff
 
 ### Endpoint: `POST /api/v1/optimize/init`
-Initializes **Generation 0** candidate creatives, seeds chromosome diversity across platforms, evaluates baseline simulated metrics, and equally distributes the campaign budget.
+Initializes **Generation 0** candidate creatives. When incoming client TikToks and ads are supplied with observed metrics (`seed_posts`), the engine ingests their actual hooks, CTAs, visuals, and metrics, evaluates their fitness according to the user persona, and allocates initial budgets via performance weights (Softmax / UCB).
 
 #### Supported Request Payloads
-The endpoint accepts **either** direct root fields or a wrapped object.
 
-##### Option A: Direct Root Payload (Standard Part 2 Output)
+##### Option A: Client TikTok & Paid Ads Seed Payload (Recommended)
 ```json
 {
-  "trend_id": "trend_9f81a20c",
+  "campaign_name": "Autonomous Multi-Agent Marketing Workflows",
+  "niche": "B2B MarTech & SaaS",
+  "persona": {
+    "type": "business",
+    "tone": "authoritative and cutting-edge",
+    "target_audience": "VP of Growth, Performance Marketers, and Tech Founders",
+    "risk_tolerance": "medium",
+    "primary_goal": "roas"
+  },
+  "total_budget": 1200.00,
+  "seed_posts": [
+    {
+      "id": "tiktok_001",
+      "source": "tiktok",
+      "hook": "Stop doing manual lead gen in 2026. Here is how AI agents book 40 calls a week while you sleep.",
+      "caption_body": "In B2B MarTech, traditional outbound is broken. Multi-agent workflows automate prospect qualification and booking with zero human bottlenecks.",
+      "call_to_action": "Book a 15-minute product walkthrough to unlock higher ROAS 🎯",
+      "visual_asset_prompt": "Dynamic split-screen screen recording showing AI agent calendar filling up with meetings, high-tempo subtitles.",
+      "hashtags": ["#aiagent", "#b2bmartech", "#automation", "#growth"],
+      "target_platform": "TikTok",
+      "metrics": {
+        "impressions": 48000,
+        "clicks": 1920,
+        "ctr": 0.040,
+        "engagement_rate": 0.092,
+        "conversions": 38,
+        "spend": 450.00,
+        "cpc": 0.23,
+        "cac": 11.84,
+        "roas": 4.80
+      }
+    },
+    {
+      "id": "ad_meta_02",
+      "source": "ad_meta",
+      "hook": "Why are 84% of MarTech founders switching to autonomous workflows this month?",
+      "caption_body": "While competitors chase yesterday's algorithms, early adopters of autonomous workflows are capturing pipeline at half the acquisition cost.",
+      "call_to_action": "Claim your complimentary workflow audit today 📊",
+      "visual_asset_prompt": "Adobe Firefly studio editorial shot, clean minimalist workspace, ambient lighting, cinematic depth of field.",
+      "hashtags": ["#marketingautomation", "#saas", "#growthhacking"],
+      "target_platform": "Instagram",
+      "metrics": {
+        "impressions": 22000,
+        "clicks": 770,
+        "ctr": 0.035,
+        "engagement_rate": 0.061,
+        "conversions": 21,
+        "spend": 310.00,
+        "cpc": 0.40,
+        "cac": 14.76,
+        "roas": 3.60
+      }
+    }
+  ]
+}
+```
+
+##### Option B: Abstract Trend / Validation Input Payload (Synthetic Fallback)
+```json
+{
   "trend_name": "Autonomous Multi-Agent Marketing Workflows",
   "keywords": ["AI Agent", "Workflow Automation", "Ad Optimization", "Content Engine"],
   "niche": "B2B MarTech & SaaS",
@@ -41,8 +99,6 @@ The endpoint accepts **either** direct root fields or a wrapped object.
   "total_budget": 1000.00
 }
 ```
-
-##### Option B: Wrapped Payload (With Optional GA Hyperparameters)
 ```json
 {
   "validation_input": {

@@ -1,6 +1,6 @@
-"""Genetic Algorithm and Evolutionary Programming Engine for marketing campaigns.
+"""Genetic Algorithm and Evolutionary Programming Engine for m8chain marketing optimization.
 
-Implements post chromosome representation, multi-objective fitness evaluation,
+Implements client seed ad ingestion, post chromosome representation, multi-objective fitness evaluation,
 tournament selection with elitism, crossover, mutation operators, and population lifecycle.
 """
 
@@ -18,6 +18,7 @@ from schemas import (
     Candidate,
     GAConfig,
     GenerationSummary,
+    InputAdOrPost,
     PerformanceObservation,
     Persona,
     PersonaType,
@@ -88,11 +89,134 @@ class EvolutionaryOptimizationEngine:
         self.simulator = simulator or MarketingPerformanceSimulator()
         self.reallocator = budget_reallocator or BudgetReallocator()
 
+        # Dynamic pools extracted from client seed ads
+        self.dynamic_hooks: List[str] = []
+        self.dynamic_captions: List[str] = []
+        self.dynamic_visuals: List[str] = []
+        self.dynamic_ctas: List[str] = []
+        self.dynamic_hashtags: List[str] = []
+
     def initialize_population(self, validation_input: ValidationInput) -> List[Candidate]:
         """Seed the Generation 0 population of candidate posts and budget allocations.
 
-        Combines trend keywords with randomized structural angles and platforms.
+        When client seed posts (TikToks / running ads) are provided:
+        1. Ingests the actual posts and their historical performance metrics.
+        2. Evaluates fitness based on client metrics and persona priorities.
+        3. Deconstructs winning creatives to populate dynamic gene pools.
+        4. Reallocates initial budget based on their actual performance weights.
+        5. Fills remaining population slots with cross-pollinated seed variations.
         """
+        if validation_input.seed_posts:
+            return self._initialize_from_seed_posts(validation_input)
+
+        return self._initialize_synthetic_population(validation_input)
+
+    def _initialize_from_seed_posts(self, validation_input: ValidationInput) -> List[Candidate]:
+        """Ingest incoming client TikToks/ads and seed Generation 0 with performance weighting."""
+        seed_candidates: List[Candidate] = []
+        niche = validation_input.niche
+        trend = validation_input.trend_name
+
+        for sp in validation_input.seed_posts:
+            # Build chromosome
+            post_chromosome = PostChromosome(
+                hook=sp.hook,
+                caption_body=sp.caption_body or sp.hook,
+                visual_asset_prompt=sp.visual_asset_prompt or sp.visual_style or "Dynamic short-form video clip, high tempo",
+                hashtags=sp.hashtags or [f"#{niche.replace(' ', '').lower()}", "#marketing"],
+                call_to_action=sp.call_to_action or "Link in bio",
+                target_platform=sp.target_platform,
+            )
+
+            # Extract metrics
+            m = sp.metrics
+            views = float(m.impressions or m.views or 1000.0)
+            clicks = int(m.clicks or max(1, int(views * m.ctr)))
+            conversions = int(m.conversions if m.conversions is not None else max(1, int(clicks * 0.05)))
+            spend = float(m.spend if m.spend is not None else 50.0)
+            cpc = float(m.cpc if m.cpc is not None else (spend / clicks if clicks > 0 else 1.5))
+            cac = float(m.cac if m.cac is not None else (spend / conversions if conversions > 0 else 25.0))
+            roas = float(m.roas if m.roas is not None else 2.5)
+
+            metrics_dict = {
+                "impressions": views,
+                "clicks": float(clicks),
+                "ctr": float(m.ctr),
+                "engagement_rate": float(m.engagement_rate),
+                "conversions": float(conversions),
+                "conversion_rate": float(conversions / clicks if clicks > 0 else 0.05),
+                "spend": spend,
+                "cpc": cpc,
+                "cac": cac,
+                "roas": roas,
+            }
+
+            candidate = Candidate(
+                id=f"cand_seed_{sp.id}",
+                generation_index=0,
+                post=post_chromosome,
+                budget=BudgetAllocation(spend_weight=1.0, daily_budget=0.0, bid_aggressiveness=1.0),
+                metrics=metrics_dict,
+                origin="client_seed",
+                original_seed_id=sp.id,
+                status="active",
+            )
+            seed_candidates.append(candidate)
+
+            # Deconstruct into dynamic gene pools
+            if sp.hook:
+                self.dynamic_hooks.append(sp.hook)
+            if sp.caption_body:
+                self.dynamic_captions.append(sp.caption_body)
+            if sp.visual_asset_prompt:
+                self.dynamic_visuals.append(sp.visual_asset_prompt)
+            if sp.call_to_action:
+                self.dynamic_ctas.append(sp.call_to_action)
+            if sp.hashtags:
+                self.dynamic_hashtags.extend(sp.hashtags)
+
+        # Evaluate fitness for all seed candidates using their actual metrics
+        self.evaluate_fitness(seed_candidates, validation_input.persona)
+
+        # Sort seed candidates by fitness descending
+        seed_candidates.sort(key=lambda c: c.fitness_score, reverse=True)
+
+        target_pop_size = self.config.population_size
+        population: List[Candidate] = []
+
+        if len(seed_candidates) >= target_pop_size:
+            population = seed_candidates[:target_pop_size]
+        else:
+            population = list(seed_candidates)
+            needed = target_pop_size - len(population)
+            for i in range(needed):
+                p1 = self.select_parent(seed_candidates)
+                p2 = self.select_parent(seed_candidates)
+                child = self.crossover(p1, p2, generation=0, idx=len(population) + 1)
+                child.origin = "seed_variation"
+                child.original_seed_id = p1.original_seed_id
+                child = self.mutate(child, validation_input)
+                population.append(child)
+
+            # Evaluate performance of the generated seed variations
+            variations = [c for c in population if c.origin == "seed_variation"]
+            if variations:
+                var_obs = self.simulator.evaluate_population(variations, validation_input)
+                self.evaluate_fitness(variations, validation_input.persona, var_obs)
+
+        # Allocate initial budget proportionally based on performance fitness
+        self.reallocator.reallocate_budget(
+            population,
+            total_budget=validation_input.total_budget,
+            method="softmax",
+            temperature=0.75,
+            exploration_ratio=0.20,
+        )
+
+        return population
+
+    def _initialize_synthetic_population(self, validation_input: ValidationInput) -> List[Candidate]:
+        """Seed Generation 0 from synthetic templates when no seed posts are supplied."""
         population: List[Candidate] = []
         platforms = [Platform.INSTAGRAM, Platform.TIKTOK, Platform.LINKEDIN, Platform.X]
         niche = validation_input.niche
@@ -137,6 +261,7 @@ class EvolutionaryOptimizationEngine:
                 generation_index=0,
                 post=chromosome,
                 budget=BudgetAllocation(spend_weight=1.0, daily_budget=0.0, bid_aggressiveness=1.0),
+                origin="evolved_offspring",
                 status="active",
             )
             population.append(candidate)
@@ -255,6 +380,7 @@ class EvolutionaryOptimizationEngine:
                 bid_aggressiveness=round(blended_bid, 2),
             ),
             parent_ids=[parent1.id, parent2.id],
+            origin="recombined",
             status="recombined",
         )
 
@@ -266,6 +392,7 @@ class EvolutionaryOptimizationEngine:
         """Apply mutation operators with configurable mutation rate.
 
         Mutates hook angle, swaps CTA or platform, and perturbs budget bidding parameters.
+        Draws dynamically from client seed angles when available.
         """
         post = candidate.post
         rate = self.config.mutation_rate
@@ -275,13 +402,13 @@ class EvolutionaryOptimizationEngine:
 
         # 1. Hook Mutation
         if random.random() < rate:
-            post.hook = random.choice(self.HOOK_TEMPLATES).format(niche=niche, trend_name=trend, keyword=kw)
+            hook_choices = self.dynamic_hooks + [t.format(niche=niche, trend_name=trend, keyword=kw) for t in self.HOOK_TEMPLATES]
+            post.hook = random.choice(hook_choices)
 
         # 2. Visual Style Mutation
         if random.random() < rate:
-            post.visual_asset_prompt = random.choice(self.VISUAL_PROMPT_TEMPLATES).format(
-                niche=niche, trend_name=trend, keyword=kw
-            )
+            visual_choices = self.dynamic_visuals + [t.format(niche=niche, trend_name=trend, keyword=kw) for t in self.VISUAL_PROMPT_TEMPLATES]
+            post.visual_asset_prompt = random.choice(visual_choices)
 
         # 3. CTA Mutation
         if random.random() < rate:
@@ -290,7 +417,8 @@ class EvolutionaryOptimizationEngine:
                 if validation_input.persona.type == PersonaType.CONTENT_CREATOR
                 else self.CTA_BUSINESS_TEMPLATES
             )
-            post.call_to_action = random.choice(cta_pool).format(niche=niche, trend_name=trend, keyword=kw)
+            cta_choices = self.dynamic_ctas + [t.format(niche=niche, trend_name=trend, keyword=kw) for t in cta_pool]
+            post.call_to_action = random.choice(cta_choices)
 
         # 4. Platform Mutation (explores alternative social distribution)
         if random.random() < (rate * 0.75):
@@ -354,6 +482,7 @@ class EvolutionaryOptimizationEngine:
         for i in range(num_elites):
             elite_copy = copy.deepcopy(population[i])
             elite_copy.status = "survived"
+            elite_copy.origin = "survived_elite"
             elites.append(elite_copy)
 
         # 4. Elimination tracking

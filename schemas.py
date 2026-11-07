@@ -1,7 +1,7 @@
-"""Data contracts, schemas, and Pydantic models for the n8chain optimization engine.
+"""Data contracts, schemas, and Pydantic models for the m8chain optimization engine.
 
-Defines genotypes, phenotypes, persona definitions, budget allocations,
-and generation lifecycle summaries for Part 3 (Optimization).
+Defines genotypes, phenotypes, persona definitions, client seed ad contracts,
+budget allocations, and generation lifecycle summaries for Part 3 (Optimization).
 """
 
 from __future__ import annotations
@@ -50,25 +50,117 @@ class Persona(BaseModel):
     )
 
 
-class ValidationInput(BaseModel):
-    """Handoff contract from Part 2 (Validation) to Part 3 (Optimization).
+class PostMetrics(BaseModel):
+    """Historical or observed performance metrics for a seed ad or post."""
+    impressions: float = Field(default=1000.0, ge=0.0, description="Total impressions or views")
+    views: Optional[float] = Field(default=None, description="Alias for impressions")
+    clicks: int = Field(default=30, ge=0, description="Total clicks")
+    ctr: float = Field(default=0.03, ge=0.0, description="Click-through rate (e.g. 0.03 = 3%)")
+    engagement_rate: float = Field(default=0.05, ge=0.0, description="Engagement rate (likes+shares+comments / views)")
+    conversions: Optional[int] = Field(default=2, ge=0, description="Direct conversions")
+    spend: Optional[float] = Field(default=50.0, ge=0.0, description="Observed ad spend in USD")
+    cpc: Optional[float] = Field(default=1.67, ge=0.0, description="Cost per click")
+    cac: Optional[float] = Field(default=25.0, ge=0.0, description="Customer acquisition cost")
+    roas: Optional[float] = Field(default=2.5, ge=0.0, description="Return on ad spend")
 
-    Provides the selected trend, matched niche, validated persona, and campaign constraints.
+    @model_validator(mode="before")
+    @classmethod
+    def sync_views(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "views" in data and ("impressions" not in data or data["impressions"] is None):
+                data["impressions"] = float(data["views"])
+            elif "impressions" in data and ("views" not in data or data["views"] is None):
+                data["views"] = float(data["impressions"])
+        return data
+
+
+class InputAdOrPost(BaseModel):
+    """Incoming seed post or running ad (e.g. from TikTok, Meta, organic)."""
+    id: str = Field(
+        default_factory=lambda: f"post_{uuid.uuid4().hex[:6]}",
+        description="Unique identifier (e.g., 'tiktok_001', 'ad_meta_04')",
+    )
+    source: str = Field(
+        default="tiktok",
+        description="Traffic origin: 'tiktok' | 'ad_meta' | 'ad_tiktok' | 'organic'",
+    )
+    hook: str = Field(
+        ...,
+        description="The hook text or hook description",
+    )
+    caption_body: str = Field(
+        default="",
+        description="Caption body / value proposition",
+    )
+    call_to_action: str = Field(
+        default="Link in bio",
+        description="Action prompt (link in bio, share, shop now, demo)",
+    )
+    visual_asset_prompt: str = Field(
+        default="Dynamic vertical short-form video clip, high tempo, kinetic captions",
+        description="Description or prompt of visual elements / Adobe template style",
+    )
+    visual_style: Optional[str] = Field(
+        default=None,
+        description="Alias for visual_asset_prompt",
+    )
+    hashtags: List[str] = Field(
+        default_factory=list,
+        description="List of hashtags",
+    )
+    target_platform: Platform = Field(
+        default=Platform.TIKTOK,
+        description="Platform: TikTok, Instagram, LinkedIn, or X",
+    )
+    metrics: PostMetrics = Field(
+        default_factory=PostMetrics,
+        description="Historical observed metrics",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "visual_style" in data and ("visual_asset_prompt" not in data or not data["visual_asset_prompt"]):
+                data["visual_asset_prompt"] = data["visual_style"]
+            if "target_platform" in data and isinstance(data["target_platform"], str):
+                norm = data["target_platform"].strip().lower()
+                mapping = {
+                    "tiktok": Platform.TIKTOK,
+                    "instagram": Platform.INSTAGRAM,
+                    "linkedin": Platform.LINKEDIN,
+                    "x": Platform.X,
+                    "twitter": Platform.X,
+                }
+                if norm in mapping:
+                    data["target_platform"] = mapping[norm]
+        return data
+
+
+class ValidationInput(BaseModel):
+    """Input contract for Part 3 (Optimization).
+
+    Accepts validated trend/niche parameters alongside incoming client TikTok posts
+    and running ad creatives with their historical performance metrics.
     """
     trend_id: str = Field(
         default_factory=lambda: f"trend_{uuid.uuid4().hex[:8]}",
-        description="Unique identifier of the validated trend",
+        description="Unique identifier of the validated trend or campaign",
     )
     trend_name: str = Field(
-        ...,
-        description="Human-readable title of the trend (e.g., 'Lo-Fi AI Productivity Hacks')",
+        default="Viral Marketing Campaign",
+        description="Human-readable title of the trend or campaign name",
+    )
+    campaign_name: Optional[str] = Field(
+        default=None,
+        description="Alias for trend_name",
     )
     keywords: List[str] = Field(
         default_factory=list,
         description="Core keyword associations and semantic tags",
     )
     niche: str = Field(
-        ...,
+        default="Creator Economy & Digital Marketing",
         description="Target industry niche (e.g., 'B2B SaaS', 'Personal Development')",
     )
     persona: Persona = Field(
@@ -84,6 +176,34 @@ class ValidationInput(BaseModel):
         gt=0.0,
         description="Total campaign budget in USD allocated for ad spend",
     )
+    seed_posts: List[InputAdOrPost] = Field(
+        default_factory=list,
+        description="Incoming client TikTok posts and running ads with historical performance",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_campaign_name(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "campaign_name" in data and ("trend_name" not in data or not data["trend_name"]):
+                data["trend_name"] = data["campaign_name"]
+            elif "trend_name" in data and ("campaign_name" not in data or not data["campaign_name"]):
+                data["campaign_name"] = data["trend_name"]
+        return data
+
+
+class CampaignInitPayload(BaseModel):
+    """Dedicated initialization payload for incoming TikToks and ads."""
+    campaign_name: str = Field(..., description="Campaign name or trend label")
+    persona: Persona = Field(..., description="Content creator vs Business persona")
+    total_budget: float = Field(default=1000.0, gt=0.0, description="Campaign total spend limit")
+    seed_posts: List[InputAdOrPost] = Field(
+        default_factory=list,
+        description="Incoming TikTok posts, Meta ads, or organic creatives with historical metrics",
+    )
+    niche: Optional[str] = Field(default="Creator Economy & Digital Marketing")
+    keywords: Optional[List[str]] = Field(default_factory=list)
+    recommended_formats: Optional[List[str]] = Field(default_factory=lambda: ["short_form_video", "carousel"])
 
 
 class PostChromosome(BaseModel):
@@ -165,6 +285,14 @@ class Candidate(BaseModel):
         default_factory=list,
         description="Parent candidate IDs for evolutionary lineage tracking",
     )
+    origin: Literal["client_seed", "survived_elite", "recombined", "evolved_offspring", "seed_variation"] = Field(
+        default="evolved_offspring",
+        description="Origin tracking: client seed ad vs evolved generation offspring",
+    )
+    original_seed_id: Optional[str] = Field(
+        default=None,
+        description="Client post ID if originated directly from an incoming TikTok or ad",
+    )
     status: Literal["active", "survived", "eliminated", "recombined"] = Field(
         default="active",
         description="Lifecycle status in current generation",
@@ -218,8 +346,8 @@ class InitCampaignRequest(BaseModel):
     @classmethod
     def resolve_payload(cls, data: Any) -> Any:
         if isinstance(data, dict):
-            if "validation_input" not in data and "trend_name" in data:
-                # Wrap direct ValidationInput provided at root level
+            if "validation_input" not in data:
+                # Wrap direct payload provided at root level
                 config = data.get("config")
                 validation_data = {k: v for k, v in data.items() if k != "config"}
                 return {"validation_input": validation_data, "config": config}

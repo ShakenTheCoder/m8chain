@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>n8chain — Evolutionary Campaign Optimizer</title>
+  <title>m8chain — Evolutionary Campaign Optimizer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,6 +25,9 @@
       --blue-bg: #edf3fc;
       --blue-text: #28456c;
       --blue-border: #d3e1f5;
+      --purple-bg: #f3e8ff;
+      --purple-text: #6b21a8;
+      --purple-border: #e9d5ff;
       --yellow-bg: #fdf5e2;
       --yellow-text: #825b17;
       --yellow-border: #faeac7;
@@ -231,6 +234,7 @@
     /* Preset Buttons Callout */
     .presets-bar {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
       margin-top: 12px;
@@ -242,7 +246,7 @@
     .preset-chip {
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
       cursor: pointer;
       font-family: var(--font);
@@ -257,6 +261,17 @@
     .preset-chip:hover {
       background: var(--bg-hover);
       border-color: #d0d0ce;
+    }
+
+    .preset-chip-featured {
+      background: var(--purple-bg);
+      border-color: var(--purple-border);
+      color: var(--purple-text);
+      font-weight: 600;
+    }
+
+    .preset-chip-featured:hover {
+      background: #ede0fc;
     }
 
     /* Control Actions */
@@ -517,6 +532,12 @@
       text-transform: capitalize;
     }
 
+    .chip-seed {
+      background: var(--purple-bg);
+      color: var(--purple-text);
+      border: 1px solid var(--purple-border);
+    }
+
     .chip-survived {
       background: var(--green-bg);
       color: var(--green-text);
@@ -673,7 +694,7 @@
     <div class="breadcrumbs">
       <span>📁 Workspace</span>
       <span>/</span>
-      <span>n8chain</span>
+      <span>m8chain</span>
       <span>/</span>
       <span class="current">⚡ Part 3: Evolutionary Optimization</span>
     </div>
@@ -689,22 +710,22 @@
   <main class="container">
     <!-- Page Header -->
     <div class="page-icon">⚡</div>
-    <h1 class="page-title">n8chain Campaign Optimization Engine</h1>
+    <h1 class="page-title">m8chain Campaign Optimization Engine</h1>
     <p class="page-subtitle">Evolutionary Genetic Algorithm & Dynamic Budget Allocation Pipeline</p>
 
     <!-- Campaign Setup Form (Notion Properties Table) -->
     <section class="properties-grid">
       <div class="property-row">
-        <div class="prop-label">🏷️ Selected Trend</div>
-        <input type="text" id="input-trend" class="prop-input" value="Autonomous Multi-Agent Marketing Workflows">
+        <div class="prop-label">🏷️ Campaign / Trend</div>
+        <input type="text" id="input-trend" class="prop-input" value="Viral B2B Multi-Agent Marketing">
       </div>
       <div class="property-row">
         <div class="prop-label">🎯 Target Niche</div>
         <input type="text" id="input-niche" class="prop-input" value="B2B MarTech & SaaS">
       </div>
       <div class="property-row">
-        <div class="prop-label">🔑 Trend Keywords</div>
-        <input type="text" id="input-keywords" class="prop-input" value="AI Agent, Workflow Automation, Ad Optimization, Content Engine">
+        <div class="prop-label">🔑 Seed Keywords</div>
+        <input type="text" id="input-keywords" class="prop-input" value="AI Agent, Workflow Automation, Ad Optimization, TikTok Marketing">
       </div>
       <div class="property-row">
         <div class="prop-label">👤 User Persona</div>
@@ -724,17 +745,20 @@
       </div>
       <div class="property-row">
         <div class="prop-label">💰 Total Budget ($)</div>
-        <input type="number" id="input-budget" class="prop-input" value="1000" min="50" step="50">
+        <input type="number" id="input-budget" class="prop-input" value="1200" min="50" step="50">
       </div>
 
       <!-- Quick Preset Buttons -->
       <div class="presets-bar">
         <span style="color: var(--text-muted); font-weight: 500;">⚡ Quick Presets:</span>
+        <button type="button" class="preset-chip preset-chip-featured" onclick="loadClientTikToksPreset()">
+          📱 Load 6 Client TikToks & Paid Ads (Real Metrics)
+        </button>
         <button type="button" class="preset-chip" onclick="loadPreset('business')">
-          🏢 B2B MarTech (Business • ROAS • $1,200)
+          🏢 B2B MarTech (Synthetic • $1,200)
         </button>
         <button type="button" class="preset-chip" onclick="loadPreset('creator')">
-          🎨 Creator Economy (Creator • Engagement • $750)
+          🎨 Creator Economy (Synthetic • $750)
         </button>
       </div>
     </section>
@@ -828,7 +852,7 @@
         <div class="empty-state" style="grid-column: 1 / -1;">
           <div class="empty-icon">🧬</div>
           <div style="font-weight: 500; color: var(--text-main); margin-bottom: 4px;">No Campaign Initialized</div>
-          <div>Click "Initialize Campaign (Gen 0)" above to seed candidates and distribute initial budgets.</div>
+          <div>Click "Initialize Campaign (Gen 0)" or load client TikToks above to seed candidates.</div>
         </div>
       </div>
     </section>
@@ -842,6 +866,7 @@
     let currentCampaignId = null;
     let currentPersona = "business";
     let campaignHistory = [];
+    let currentSeedPosts = [];
     const PALETTE = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316", "#14b8a6", "#6366f1", "#84cc16"];
 
     function showToast(msg) {
@@ -859,21 +884,167 @@
       goalSelect.value = (type === "business") ? "roas" : "engagement";
     }
 
+    function loadClientTikToksPreset() {
+      document.getElementById("input-trend").value = "TikTok & Multi-Channel Paid Ads Acceleration";
+      document.getElementById("input-niche").value = "B2B MarTech & SaaS";
+      document.getElementById("input-keywords").value = "TikTok Ads, Multi-Agent Workflow, ROAS Engine, Paid Social";
+      document.getElementById("input-budget").value = 1500;
+      setPersona("business");
+
+      currentSeedPosts = [
+        {
+          id: "tiktok_viral_01",
+          source: "tiktok",
+          hook: "Stop doing manual lead gen in 2026. Here is how AI agents book 40 calls a week while you sleep.",
+          caption_body: "In B2B MarTech, traditional cold outbound is obsolete. Multi-agent workflows automate prospect qualification and booking with zero human bottlenecks.",
+          call_to_action: "Book a 15-minute product walkthrough to unlock higher ROAS 🎯",
+          visual_asset_prompt: "High-tempo TikTok vertical screen capture showing automated calendar booking notifications and neon subtitle hooks.",
+          hashtags: ["#tiktokgrowth", "#aiagent", "#b2bmartech", "#automation"],
+          target_platform: "TikTok",
+          metrics: {
+            impressions: 48000,
+            views: 48000,
+            clicks: 1920,
+            ctr: 0.040,
+            engagement_rate: 0.092,
+            conversions: 38,
+            spend: 450.00,
+            cpc: 0.23,
+            cac: 11.84,
+            roas: 4.80
+          }
+        },
+        {
+          id: "ad_meta_carousel_02",
+          source: "ad_meta",
+          hook: "Why are 84% of MarTech founders switching to autonomous workflows this month?",
+          caption_body: "While competitors chase yesterday's algorithms, early adopters of autonomous workflows are capturing pipeline at half the acquisition cost.",
+          call_to_action: "Claim your complimentary workflow audit today 📊",
+          visual_asset_prompt: "Adobe Firefly studio editorial shot, clean minimalist workspace, ambient lighting, cinematic depth of field.",
+          hashtags: ["#marketingautomation", "#saas", "#growthhacking"],
+          target_platform: "Instagram",
+          metrics: {
+            impressions: 22000,
+            views: 22000,
+            clicks: 770,
+            ctr: 0.035,
+            engagement_rate: 0.061,
+            conversions: 21,
+            spend: 310.00,
+            cpc: 0.40,
+            cac: 14.76,
+            roas: 3.60
+          }
+        },
+        {
+          id: "tiktok_pov_03",
+          source: "tiktok",
+          hook: "POV: You fired your $5k/mo marketing agency and replaced them with 3 automated multi-agent prompts.",
+          caption_body: "Here is the exact framework we used to 10x our creative output without increasing headcount. Full breakdown in bio.",
+          call_to_action: "Download the complete enterprise playbook 📥",
+          visual_asset_prompt: "Split-screen POV shot with green-screen background showing high-converting ad analytics dashboard.",
+          hashtags: ["#founderlife", "#agencysecrets", "#automationhacks"],
+          target_platform: "TikTok",
+          metrics: {
+            impressions: 65000,
+            views: 65000,
+            clicks: 2860,
+            ctr: 0.044,
+            engagement_rate: 0.115,
+            conversions: 44,
+            spend: 520.00,
+            cpc: 0.18,
+            cac: 11.82,
+            roas: 5.20
+          }
+        },
+        {
+          id: "linkedin_thought_04",
+          source: "ad_meta",
+          hook: "The math behind 4x pipeline with zero ad waste: A breakdown of our client acquisition engine.",
+          caption_body: "We dissected 500+ B2B MarTech campaigns. The common denominator among top 1% ROAS performers is algorithmic creative iteration.",
+          call_to_action: "Book a 15-minute walkthrough 🎯",
+          visual_asset_prompt: "High-contrast Bento-box grid displaying 3 actionable pipeline stats, modern glassmorphic styling.",
+          hashtags: ["#b2bsaas", "#pipelinegrowth", "#martech"],
+          target_platform: "LinkedIn",
+          metrics: {
+            impressions: 12000,
+            views: 12000,
+            clicks: 288,
+            ctr: 0.024,
+            engagement_rate: 0.038,
+            conversions: 14,
+            spend: 280.00,
+            cpc: 0.97,
+            cac: 20.00,
+            roas: 3.20
+          }
+        },
+        {
+          id: "tiktok_demo_05",
+          source: "tiktok",
+          hook: "Watch me build a full marketing campaign in 60 seconds using this exact prompt stack.",
+          caption_body: "Step 1: Scrape winning hooks. Step 2: Genetic crossover. Step 3: Auto-reallocate budget. Here is how to replicate it:",
+          call_to_action: "Start your 14-day free trial ⚡",
+          visual_asset_prompt: "High-tempo screen recording with zoom-ins on prompt templates and animated arrows.",
+          hashtags: ["#martechdemo", "#buildinpublic", "#saastips"],
+          target_platform: "TikTok",
+          metrics: {
+            impressions: 34000,
+            views: 34000,
+            clicks: 1190,
+            ctr: 0.035,
+            engagement_rate: 0.084,
+            conversions: 18,
+            spend: 260.00,
+            cpc: 0.22,
+            cac: 14.44,
+            roas: 2.90
+          }
+        },
+        {
+          id: "x_contrarian_06",
+          source: "organic",
+          hook: "Unpopular opinion: Traditional media buying is dead. Multi-agent evolution is the future.",
+          caption_body: "If your creative team is still writing one ad at a time, you're competing against autonomous systems testing 50 variants an hour.",
+          call_to_action: "Link in bio for full prompt cheat sheet 🚀",
+          visual_asset_prompt: "Minimalist typographic quote graphic with high-contrast monochrome gradient.",
+          hashtags: ["#marketingtrends", "#growthtech"],
+          target_platform: "X",
+          metrics: {
+            impressions: 18000,
+            views: 18000,
+            clicks: 504,
+            ctr: 0.028,
+            engagement_rate: 0.052,
+            conversions: 8,
+            spend: 150.00,
+            cpc: 0.30,
+            cac: 18.75,
+            roas: 2.10
+          }
+        }
+      ];
+
+      showToast("Loaded 6 Client TikToks & Paid Ads with Historical Metrics!");
+    }
+
     function loadPreset(type) {
+      currentSeedPosts = [];
       if (type === "business") {
         document.getElementById("input-trend").value = "Autonomous Multi-Agent Marketing Workflows";
         document.getElementById("input-niche").value = "B2B MarTech & SaaS";
         document.getElementById("input-keywords").value = "AI Agent, Workflow Automation, Ad Optimization, Content Engine";
         document.getElementById("input-budget").value = 1200;
         setPersona("business");
-        showToast("Loaded 'B2B MarTech' Business Preset");
+        showToast("Loaded 'B2B MarTech' Synthetic Preset");
       } else {
         document.getElementById("input-trend").value = "Corporate Satire & Creator Economy";
         document.getElementById("input-niche").value = "Creator Economy & Tech Culture";
         document.getElementById("input-keywords").value = "Workplace Humor, Tech Startup Life, Burnout Memes, Slack Culture";
         document.getElementById("input-budget").value = 750;
         setPersona("content_creator");
-        showToast("Loaded 'Office Satire' Creator Preset");
+        showToast("Loaded 'Office Satire' Synthetic Preset");
       }
     }
 
@@ -891,6 +1062,7 @@
       const payload = {
         validation_input: {
           trend_name: trend,
+          campaign_name: trend,
           keywords: kw,
           niche: niche,
           persona: {
@@ -901,7 +1073,8 @@
             primary_goal: goal
           },
           recommended_formats: ["short_form_video", "carousel", "high_contrast_post"],
-          total_budget: budget
+          total_budget: budget,
+          seed_posts: currentSeedPosts
         },
         config: {
           population_size: 10,
@@ -930,7 +1103,8 @@
         document.getElementById("top-status-text").innerText = `Active: ${currentCampaignId}`;
 
         renderDashboard(data.generation, budget);
-        showToast("Generation 0 Initialized successfully!");
+        const seedNotice = currentSeedPosts.length > 0 ? ` (with ${currentSeedPosts.length} client seed ads)` : "";
+        showToast(`Generation 0 Initialized successfully${seedNotice}!`);
       } catch (err) {
         alert("Initialization failed: " + err.message);
       } finally {
@@ -1169,8 +1343,21 @@
         const roas = (metrics.roas || 0).toFixed(1);
         const cvr = (metrics.conversion_rate * 100 || 0).toFixed(1);
 
-        const statusClass = cand.status === "survived" ? "chip-survived" : (cand.status === "recombined" ? "chip-recombined" : "chip-active");
-        const statusLabel = cand.status === "survived" ? "🏆 Survived Elite" : (cand.status === "recombined" ? "🧬 Recombined" : "Active");
+        // Origin badge determination
+        let originChip = "";
+        if (cand.origin === "client_seed") {
+          originChip = `<span class="chip chip-seed">📱 Client Seed Ad</span>`;
+        } else if (cand.origin === "seed_variation") {
+          originChip = `<span class="chip chip-recombined">🧬 Seed Offspring</span>`;
+        } else if (cand.status === "survived") {
+          originChip = `<span class="chip chip-survived">🏆 Survived Elite</span>`;
+        } else if (cand.status === "recombined") {
+          originChip = `<span class="chip chip-recombined">🧬 Recombined</span>`;
+        } else {
+          originChip = `<span class="chip chip-active">Active</span>`;
+        }
+
+        const seedNote = cand.original_seed_id ? `<span style="font-size: 10px; color: var(--purple-text); background: var(--purple-bg); padding: 1px 4px; border-radius: 3px;">From ${escapeHtml(cand.original_seed_id)}</span>` : "";
 
         const card = document.createElement("div");
         card.className = "candidate-card";
@@ -1179,9 +1366,10 @@
             <div class="candidate-rank">
               <span>#${rank}</span>
               <span style="color: var(--text-muted); font-weight: normal; font-size: 11px;">(${cand.id})</span>
+              ${seedNote}
             </div>
             <div class="candidate-badges">
-              <span class="chip ${statusClass}">${statusLabel}</span>
+              ${originChip}
               <span class="chip chip-platform">${post.target_platform}</span>
             </div>
           </div>
@@ -1192,7 +1380,7 @@
 
           <div class="notion-callout">
             <span class="notion-callout-icon">🎨</span>
-            <div class="notion-callout-text"><strong>Adobe Visual Prompt:</strong> ${escapeHtml(post.visual_asset_prompt)}</div>
+            <div class="notion-callout-text"><strong>Visual Prompt:</strong> ${escapeHtml(post.visual_asset_prompt)}</div>
           </div>
 
           <div class="cta-badge">📣 ${escapeHtml(post.call_to_action)}</div>

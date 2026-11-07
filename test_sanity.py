@@ -489,9 +489,107 @@ class TestFastAPIRoutes:
         res_root = client.get("/")
         assert res_root.status_code == 200
         assert "text/html" in res_root.headers.get("content-type", "")
-        assert "n8chain Campaign Optimization Engine" in res_root.text
+        assert "m8chain Campaign Optimization Engine" in res_root.text
 
         res_ui = client.get("/ui")
         assert res_ui.status_code == 200
         assert "text/html" in res_ui.headers.get("content-type", "")
-        assert "n8chain Campaign Optimization Engine" in res_ui.text
+        assert "m8chain Campaign Optimization Engine" in res_ui.text
+
+    def test_metric_driven_seed_posts_evolution_cycle(self):
+        """Test full evolutionary pipeline seeded directly from incoming client TikToks and ads."""
+        seed_posts = [
+            {
+                "id": "tiktok_top_performer",
+                "source": "tiktok",
+                "hook": "Stop writing manual emails: here is our AI agent blueprint",
+                "caption_body": "Automate outbound pipeline in 3 clicks.",
+                "call_to_action": "Book demo in bio",
+                "visual_asset_prompt": "Screen recording of automated calendar booking",
+                "hashtags": ["#aiagent", "#b2b"],
+                "target_platform": "TikTok",
+                "metrics": {
+                    "impressions": 75000,
+                    "clicks": 3375,
+                    "ctr": 0.045,
+                    "engagement_rate": 0.10,
+                    "conversions": 60,
+                    "spend": 500.0,
+                    "cpc": 0.15,
+                    "cac": 8.33,
+                    "roas": 6.2,
+                },
+            },
+            {
+                "id": "tiktok_mediocre",
+                "source": "tiktok",
+                "hook": "Why you need better marketing tools",
+                "caption_body": "Tools help you scale.",
+                "call_to_action": "Link in bio",
+                "visual_asset_prompt": "Generic product shot",
+                "hashtags": ["#tools"],
+                "target_platform": "TikTok",
+                "metrics": {
+                    "impressions": 10000,
+                    "clicks": 150,
+                    "ctr": 0.015,
+                    "engagement_rate": 0.02,
+                    "conversions": 2,
+                    "spend": 100.0,
+                    "cpc": 0.67,
+                    "cac": 50.0,
+                    "roas": 1.1,
+                },
+            },
+        ]
+
+        payload = {
+            "campaign_name": "High-ROAS Client Push",
+            "niche": "MarTech SaaS",
+            "persona": {
+                "type": "business",
+                "tone": "cutting-edge",
+                "primary_goal": "roas",
+            },
+            "total_budget": 1000.0,
+            "seed_posts": seed_posts,
+            "config": {"population_size": 8, "elitism_ratio": 0.25},
+        }
+
+        # 1. Initialize
+        init_res = client.post("/api/v1/optimize/init", json=payload)
+        assert init_res.status_code == 200
+        init_data = init_res.json()
+        camp_id = init_data["campaign_id"]
+        gen0 = init_data["generation"]
+
+        # 2. Check Generation 0 Candidate Origins and Budget Allocation
+        active = gen0["active_candidates"]
+        assert len(active) == 8
+
+        seed_cands = [c for c in active if c["origin"] == "client_seed"]
+        assert len(seed_cands) >= 2
+
+        # Winner seed gets significantly higher budget allocation than mediocre seed
+        winner = next(c for c in active if c["original_seed_id"] == "tiktok_top_performer")
+        mediocre = next(c for c in active if c["original_seed_id"] == "tiktok_mediocre")
+        assert winner["fitness_score"] > mediocre["fitness_score"]
+        assert winner["budget"]["daily_budget"] > mediocre["budget"]["daily_budget"]
+
+        # Budget conservation
+        assert BudgetReallocator.verify_budget_conservation(
+            [Candidate(**c) for c in active],
+            total_budget=1000.0,
+        )
+
+        # 3. Evolve to Generation 1
+        step_res = client.post("/api/v1/optimize/step", json={"campaign_id": camp_id})
+        assert step_res.status_code == 200
+        step_data = step_res.json()
+        gen1 = step_data["generation"]
+        assert gen1["generation"] == 1
+
+        # Elites preserved from winning seed
+        survivors = [c for c in gen1["active_candidates"] if c["status"] == "survived"]
+        assert len(survivors) >= 1
+        assert any(c["original_seed_id"] == "tiktok_top_performer" for c in survivors)

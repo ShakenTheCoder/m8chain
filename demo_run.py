@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""End-to-end demonstration and verification CLI script for n8chain Evolutionary Optimization.
+"""End-to-end demonstration and verification CLI script for m8chain Evolutionary Optimization.
 
 Simulates a full multi-generation campaign run, showcasing post chromosome evolution,
 elitism, tournament selection, stochastic simulation feedback, and dynamic budget reallocation
@@ -34,9 +34,9 @@ console = Console()
 
 
 def render_banner() -> None:
-    """Print branded ASCII banner for n8chain."""
+    """Print branded ASCII banner for m8chain."""
     banner_text = Text()
-    banner_text.append("⚡ n8chain — Part 3: Evolutionary Optimization Engine\n", style="bold cyan")
+    banner_text.append("⚡ m8chain — Part 3: Evolutionary Optimization Engine\n", style="bold cyan")
     banner_text.append("   Genetic Algorithm & Dynamic Budget Allocation Pipeline (Hackathon Demo)", style="dim white")
     console.print(Panel(banner_text, border_style="cyan", expand=False))
 
@@ -258,7 +258,7 @@ def run_demo(
 
 def main() -> None:
     """CLI entrypoint."""
-    parser = argparse.ArgumentParser(description="n8chain Evolutionary Optimization CLI Demo")
+    parser = argparse.ArgumentParser(description="m8chain Evolutionary Optimization CLI Demo")
     parser.add_argument("--generations", type=int, default=5, help="Number of generations to evolve (default: 5)")
     parser.add_argument("--population", type=int, default=10, help="Population size (default: 10)")
     parser.add_argument("--budget", type=float, default=1000.0, help="Total campaign budget in USD (default: 1000.0)")

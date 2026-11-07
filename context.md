@@ -1,10 +1,10 @@
-# n8chain — Project Context
+# m8chain — Project Context
 
 ## Overview
 
-n8chain is a marketing optimization system being built at an Adobe hackathon whose theme is marketing. The project connects social media trend discovery, audience validation, and iterative content and budget optimization.
+m8chain is a marketing optimization system being built at an Adobe hackathon whose theme is marketing. The project connects social media trend discovery, audience validation, and iterative content and budget optimization.
 
-The product is named **n8chain**. Its current GitHub repository is named **m8chain**.
+The product is named **m8chain**. Its GitHub repository is named **m8chain**.
 
 ## End-to-end workflow
 

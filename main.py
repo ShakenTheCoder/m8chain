@@ -1,6 +1,6 @@
-"""FastAPI service exposing RESTful endpoints for the n8chain evolutionary engine.
+"""FastAPI service exposing RESTful endpoints for the m8chain evolutionary engine.
 
-Provides endpoints to initialize campaigns from Part 2 validation contracts,
+Provides endpoints to initialize campaigns from client TikTok/ad metrics or Part 2 validation contracts,
 step generational evolution with real or simulated telemetry, and query
 convergence curves and Pareto-optimal post candidates.
 """
@@ -19,12 +19,14 @@ from pydantic import BaseModel, Field
 from budget import BudgetReallocator
 from engine import EvolutionaryOptimizationEngine
 from schemas import (
+    CampaignInitPayload,
     CampaignStatusResponse,
     Candidate,
     GAConfig,
     GenerationSummary,
     InitCampaignRequest,
     InitCampaignResponse,
+    InputAdOrPost,
     PerformanceObservation,
     StepCampaignRequest,
     StepCampaignResponse,
@@ -33,7 +35,7 @@ from schemas import (
 from simulator import MarketingPerformanceSimulator
 
 app = FastAPI(
-    title="n8chain Evolutionary Optimization API",
+    title="m8chain Evolutionary Optimization API",
     version="1.0.0",
     description="Evolutionary Programming & Genetic Algorithm service for marketing content & budget optimization.",
 )
@@ -79,7 +81,7 @@ def get_dashboard() -> HTMLResponse:
     index_path = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
-    return HTMLResponse("<h1>n8chain Optimization UI Not Found</h1>", status_code=404)
+    return HTMLResponse("<h1>m8chain Optimization UI Not Found</h1>", status_code=404)
 
 
 @app.get("/health", tags=["Health"])
@@ -87,7 +89,7 @@ def health_check() -> Dict[str, str]:
     """Health check endpoint confirming API service readiness."""
     return {
         "status": "online",
-        "service": "n8chain-optimization-engine",
+        "service": "m8chain-optimization-engine",
         "version": "1.0.0",
         "stage": "Part 3: Optimization",
     }
@@ -100,21 +102,22 @@ def health_check() -> Dict[str, str]:
     tags=["Optimization"],
 )
 def initialize_campaign(request: InitCampaignRequest) -> InitCampaignResponse:
-    """Initialize Generation 0 from Part 2 ValidationInput contract.
+    """Initialize Generation 0 from incoming client TikToks/ads or ValidationInput contract.
 
-    Seeds candidate creatives across platforms and equally distributes total budget.
+    Seeds candidate creatives across platforms and allocates performance-weighted budget.
     """
     campaign_id = f"camp_{uuid.uuid4().hex[:8]}"
     ga_config = request.config or GAConfig()
     engine = get_engine(ga_config)
 
-    # 1. Initialize candidate population
+    # 1. Initialize candidate population (ingests seed posts if present)
     gen0_population = engine.initialize_population(request.validation_input)
 
-    # 2. Evaluate Generation 0 baseline with simulated feedback
-    simulator = MarketingPerformanceSimulator()
-    obs = simulator.evaluate_population(gen0_population, request.validation_input)
-    engine.evaluate_fitness(gen0_population, request.validation_input.persona, obs)
+    # 2. Evaluate Generation 0 baseline with simulated feedback only if not already evaluated from seed posts
+    if not request.validation_input.seed_posts:
+        simulator = MarketingPerformanceSimulator()
+        obs = simulator.evaluate_population(gen0_population, request.validation_input)
+        engine.evaluate_fitness(gen0_population, request.validation_input.persona, obs)
 
     # 3. Create Generation 0 summary
     best_candidate = max(gen0_population, key=lambda c: c.fitness_score)

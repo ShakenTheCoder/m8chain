@@ -1,0 +1,7 @@
+# Optional local weights execution for convaiinnovations/laya (ModernBERT-large, 421M params, 512 ctx)
+# Install when running with LAYA_BACKEND=local (requires ~1.7GB checkpoint + PyTorch)
+laya>=0.1.0
+transformers>=4.48.0
+torch>=2.5.0
+accelerate>=1.2.0
+huggingface_hub>=0.27.0

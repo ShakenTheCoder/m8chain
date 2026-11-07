@@ -1,0 +1,921 @@
+{
+  "trends": [
+    {
+      "trend_id": "trend-skin-barrier-reset",
+      "title": "72-Hour Ceramide Skin Barrier Reset",
+      "summary": "Creators strip back 10-step exfoliation routines to a 3-product ceramide + peptide mist protocol, showing close-up hydration meter readings and day-1 vs day-3 redness comparisons.",
+      "discovered_at": "2026-11-07T10:15:00Z",
+      "shared_elements": [
+        "before_after_hydration_check",
+        "stop_over_exfoliating_hook",
+        "ceramide_serum_layering",
+        "comment_keyword_routine_cta"
+      ],
+      "records": [
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-101",
+          "status": "complete",
+          "video": {
+            "platform": "tiktok",
+            "id": "tt-7439100291",
+            "url": "https://www.tiktok.com/@derm.claire/video/7439100291",
+            "creator_id": "derm.claire",
+            "published_at": "2026-11-05T18:20:00Z",
+            "duration_seconds": 28
+          },
+          "collection": {
+            "run_id": "apify-run-9921",
+            "collected_at": "2026-11-07T08:00:00Z",
+            "discovery_queries": ["skin barrier repair routine", "ceramide serum"]
+          },
+          "language": {
+            "code": "en",
+            "confidence": 0.99,
+            "source": "whisper-lid",
+            "supported": true,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "Stop nuking your moisture barrier with nightly acids. Here is the exact 3-step ceramide reset that calmed my skin in 72 hours. Comment BARRIER for the routine checklist.",
+            "hashtags": ["skincare", "skinbarrier", "ceramides", "dermcheck", "glowroutine"],
+            "transcript": {
+              "status": "complete",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "en",
+              "text": "If your moisturizer stings when you put it on, stop using actives tonight. Swap everything for a gentle cleanser, damp-skin peptide serum, and a triple ceramide cream for 72 hours. Comment barrier and I will send the full ingredient checklist.",
+              "segments": [
+                {
+                  "start_seconds": 0.0,
+                  "end_seconds": 4.2,
+                  "text": "If your moisturizer stings when you put it on, stop using actives tonight."
+                },
+                {
+                  "start_seconds": 4.2,
+                  "end_seconds": 19.5,
+                  "text": "Swap everything for a gentle cleanser, damp-skin peptide serum, and a triple ceramide cream for 72 hours."
+                },
+                {
+                  "start_seconds": 19.5,
+                  "end_seconds": 27.6,
+                  "text": "Comment barrier and I will send the full ingredient checklist."
+                }
+              ]
+            },
+            "sound": {
+              "id": "snd-orig-101",
+              "title": "Original Sound - derm.claire",
+              "author": "derm.claire",
+              "is_original": true
+            },
+            "on_screen_text": {
+              "status": "complete",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "Signs your skin barrier is damaged", "frame_index": 1, "timestamp_seconds": 0.8 },
+                { "text": "72-Hour Ceramide Reset (3 steps only)", "frame_index": 5, "timestamp_seconds": 6.5 },
+                { "text": "Comment BARRIER for free routine guide", "frame_index": 11, "timestamp_seconds": 21.0 }
+              ]
+            },
+            "text_sequences": [
+              {
+                "source": "ocr+transcript",
+                "text": "72-Hour Ceramide Reset",
+                "normalized": "72 hour ceramide reset",
+                "folded": "72 hour ceramide reset",
+                "tokens": ["72", "hour", "ceramide", "reset", "skin", "barrier"],
+                "start_seconds": 0.8,
+                "end_seconds": 21.0
+              }
+            ],
+            "numeric_expressions": [
+              {
+                "source": "transcript",
+                "text": "72 hours",
+                "compact_digits": "72",
+                "start_seconds": 14.1,
+                "match_hint_only": false
+              },
+              {
+                "source": "ocr",
+                "text": "3 steps",
+                "compact_digits": "3",
+                "start_seconds": 6.5,
+                "match_hint_only": true
+              }
+            ]
+          },
+          "description": {
+            "text": "Dermatology creator explains stinging moisturizer symptom and demonstrates a 3-step ceramide and peptide barrier repair routine with a comment-automation CTA.",
+            "sources": ["transcript", "on_screen_text", "visual"],
+            "method": "multimodal-fusion-v2"
+          },
+          "visual": {
+            "status": "complete",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Bathroom vanity talking-head opening followed by split-screen redness comparison and macro texture shots of serum and ceramide cream application.",
+            "frames": [
+              {
+                "index": 0,
+                "timestamp_seconds": 0.5,
+                "description": "Close-up of creator holding exfoliating toner bottle with red X overlay",
+                "asset_path": "frames/org-rec-101/f000.jpg"
+              },
+              {
+                "index": 6,
+                "timestamp_seconds": 10.2,
+                "description": "Applying milky peptide serum onto damp cheek under ring light",
+                "asset_path": "frames/org-rec-101/f006.jpg"
+              }
+            ],
+            "actions": [
+              {
+                "description": "Creator waves away AHA/BHA bottles in hook shot",
+                "frame_indices": [0, 1],
+                "start_seconds": 0.0,
+                "end_seconds": 3.5
+              },
+              {
+                "description": "Applies peptide serum and ceramide cream in close-up demo",
+                "frame_indices": [5, 6, 8],
+                "start_seconds": 6.0,
+                "end_seconds": 19.0
+              }
+            ],
+            "coverage": "full",
+            "audio_delivery": "direct_to_camera_voice",
+            "action_localization": "timestamp_grounded"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-101.mp4",
+            "video_sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T08:05:00Z",
+            "views": 642000,
+            "likes": 68400,
+            "shares": 16900,
+            "comments": 4120,
+            "saves": 29500,
+            "like_rate": 0.1065,
+            "share_rate": 0.0263
+          },
+          "features": {
+            "topic": "ceramide skin barrier repair",
+            "hook_type": "problem_solution",
+            "format": "split_screen_demo",
+            "call_to_action": "Comment BARRIER for routine checklist",
+            "opening_text": "If your moisturizer stings when you put it on, stop using actives tonight.",
+            "evidence_sources": ["transcript", "on_screen_text", "visual"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "complete",
+            "taxonomy_version": "1.2",
+            "input_truncated": false,
+            "min_confidence": 0.89
+          },
+          "limitations": []
+        },
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-102",
+          "status": "partial",
+          "video": {
+            "platform": "instagram_reels",
+            "id": "ig-331094821",
+            "url": "https://www.instagram.com/reel/C9xBarrier/",
+            "creator_id": "glowwithmaya",
+            "published_at": "2026-11-06T12:40:00Z",
+            "duration_seconds": 22
+          },
+          "collection": {
+            "run_id": "apify-run-9921",
+            "collected_at": "2026-11-07T08:12:00Z",
+            "discovery_queries": ["ceramide reset", "damaged skin barrier"]
+          },
+          "language": {
+            "code": "en",
+            "confidence": 0.96,
+            "source": "whisper-lid",
+            "supported": true,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "Day 1 vs Day 3 of ditching retinol for barrier serum + ceramide moisturizer. Link in bio for the travel duo (15% off code GLOW15).",
+            "hashtags": ["skincare", "barrierrepair", "ceramide", "hydration", "sensitiveskin"],
+            "transcript": {
+              "status": "complete",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "en",
+              "text": "Here is my skin on Monday after overdoing retinol versus Thursday morning using only hydration serum and ceramide cream. Grab the barrier duo from the link in my bio.",
+              "segments": [
+                {
+                  "start_seconds": 0.0,
+                  "end_seconds": 9.8,
+                  "text": "Here is my skin on Monday after overdoing retinol versus Thursday morning using only hydration serum and ceramide cream."
+                },
+                {
+                  "start_seconds": 9.8,
+                  "end_seconds": 18.4,
+                  "text": "Grab the barrier duo from the link in my bio."
+                }
+              ]
+            },
+            "sound": {
+              "id": "snd-trend-884",
+              "title": "Soft Synth Morning Loop",
+              "author": "lofi.lab",
+              "is_original": false
+            },
+            "on_screen_text": {
+              "status": "partial",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "Day 1 vs Day 3 Barrier Reset", "frame_index": 1, "timestamp_seconds": 1.0 }
+              ]
+            },
+            "text_sequences": [
+              {
+                "source": "transcript",
+                "text": "hydration serum and ceramide cream",
+                "normalized": "hydration serum and ceramide cream",
+                "folded": "hydration serum and ceramide cream",
+                "tokens": ["hydration", "serum", "ceramide", "cream"],
+                "start_seconds": 4.0,
+                "end_seconds": 9.8
+              }
+            ],
+            "numeric_expressions": [
+              {
+                "source": "post_description",
+                "text": "15% off",
+                "compact_digits": "15",
+                "start_seconds": 0.0,
+                "match_hint_only": false
+              }
+            ]
+          },
+          "description": {
+            "text": "Before-and-after cheek redness reel comparing day 1 retinol irritation to day 3 ceramide hydration recovery with discount code CTA.",
+            "sources": ["transcript", "post_description"],
+            "method": "multimodal-fusion-v2"
+          },
+          "visual": {
+            "status": "complete",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Side-by-side daylight selfie comparison followed by product bottle flatlay.",
+            "frames": [
+              {
+                "index": 1,
+                "timestamp_seconds": 1.0,
+                "description": "Split screen showing flaky cheek on left and hydrated skin on right",
+                "asset_path": "frames/org-rec-102/f001.jpg"
+              }
+            ],
+            "actions": [
+              {
+                "description": "Displays day-1 vs day-3 split-screen skin comparison",
+                "frame_indices": [0, 1, 2],
+                "start_seconds": 0.0,
+                "end_seconds": 8.5
+              }
+            ],
+            "coverage": "sampled",
+            "audio_delivery": "voiceover_with_music",
+            "action_localization": "coarse"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-102.mp4",
+            "video_sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T08:15:00Z",
+            "views": 389000,
+            "likes": 37400,
+            "shares": 8200,
+            "comments": 960,
+            "saves": 14100,
+            "like_rate": 0.0961,
+            "share_rate": 0.0211
+          },
+          "features": {
+            "topic": "ceramide skin barrier repair",
+            "hook_type": "before_after",
+            "format": "split_screen_demo",
+            "call_to_action": "Link in bio with 15% off code GLOW15",
+            "opening_text": "Here is my skin on Monday after overdoing retinol versus Thursday morning.",
+            "evidence_sources": ["transcript", "post_description", "visual"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "complete",
+            "taxonomy_version": "1.2",
+            "input_truncated": false,
+            "min_confidence": 0.81
+          },
+          "limitations": [
+            "ocr_low_contrast_white_text_frames_10_18"
+          ]
+        }
+      ]
+    },
+    {
+      "trend_id": "trend-ai-workflow-solostack",
+      "title": "60-Second Solo-Founder AI Automation Stack",
+      "summary": "Founders and B2B creators share split-screen screen recordings replacing manual client onboarding or video editing tasks with a 3-tool AI agent pipeline and free template link.",
+      "discovered_at": "2026-11-07T11:05:00Z",
+      "shared_elements": [
+        "hours_saved_counter_hook",
+        "live_screen_recording_walkthrough",
+        "comment_stack_lead_magnet_cta"
+      ],
+      "records": [
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-201",
+          "status": "complete",
+          "video": {
+            "platform": "tiktok",
+            "id": "tt-7439558812",
+            "url": "https://www.tiktok.com/@ops.by.liam/video/7439558812",
+            "creator_id": "ops.by.liam",
+            "published_at": "2026-11-06T15:10:00Z",
+            "duration_seconds": 36
+          },
+          "collection": {
+            "run_id": "apify-run-9924",
+            "collected_at": "2026-11-07T09:00:00Z",
+            "discovery_queries": ["ai workflow automation", "saas productivity stack"]
+          },
+          "language": {
+            "code": "en",
+            "confidence": 0.99,
+            "source": "whisper-lid",
+            "supported": true,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "This 3-node AI automation cut 11 hours of weekly campaign reporting down to 90 seconds. Start the free 14-day SaaS workspace trial or comment STACK for the JSON template.",
+            "hashtags": ["aiworkflow", "automation", "saas", "productivity", "solofounder", "creatorstack"],
+            "transcript": {
+              "status": "complete",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "en",
+              "text": "Stop copying ad metrics into spreadsheets every Monday. I wired our social analytics into an AI workflow agent that drafts client summaries and Slack alerts in 90 seconds. Comment stack or grab the free trial link in bio.",
+              "segments": [
+                {
+                  "start_seconds": 0.0,
+                  "end_seconds": 5.1,
+                  "text": "Stop copying ad metrics into spreadsheets every Monday."
+                },
+                {
+                  "start_seconds": 5.1,
+                  "end_seconds": 24.8,
+                  "text": "I wired our social analytics into an AI workflow agent that drafts client summaries and Slack alerts in 90 seconds."
+                },
+                {
+                  "start_seconds": 24.8,
+                  "end_seconds": 35.2,
+                  "text": "Comment stack or grab the free trial link in bio."
+                }
+              ]
+            },
+            "sound": {
+              "id": "snd-orig-201",
+              "title": "Original Sound - ops.by.liam",
+              "author": "ops.by.liam",
+              "is_original": true
+            },
+            "on_screen_text": {
+              "status": "complete",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "11 hrs/week -> 90 seconds", "frame_index": 0, "timestamp_seconds": 0.6 },
+                { "text": "3-Node AI Reporting Pipeline", "frame_index": 4, "timestamp_seconds": 8.0 },
+                { "text": "Free 14-Day Trial + Template in Bio", "frame_index": 10, "timestamp_seconds": 27.0 }
+              ]
+            },
+            "text_sequences": [
+              {
+                "source": "ocr",
+                "text": "3-Node AI Reporting Pipeline",
+                "normalized": "3 node ai reporting pipeline",
+                "folded": "3 node ai reporting pipeline",
+                "tokens": ["ai", "reporting", "pipeline", "automation", "saas"],
+                "start_seconds": 8.0,
+                "end_seconds": 27.0
+              }
+            ],
+            "numeric_expressions": [
+              {
+                "source": "ocr",
+                "text": "11 hrs/week",
+                "compact_digits": "11",
+                "start_seconds": 0.6,
+                "match_hint_only": false
+              },
+              {
+                "source": "ocr",
+                "text": "14-Day Trial",
+                "compact_digits": "14",
+                "start_seconds": 27.0,
+                "match_hint_only": false
+              }
+            ]
+          },
+          "description": {
+            "text": "Split-screen SaaS automation demo showing workflow canvas transforming raw social metrics into automated client briefs with a 14-day free trial CTA.",
+            "sources": ["transcript", "on_screen_text", "visual"],
+            "method": "multimodal-fusion-v2"
+          },
+          "visual": {
+            "status": "complete",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Top half shows workflow automation canvas executing green nodes; bottom half shows founder explaining steps on mic.",
+            "frames": [
+              {
+                "index": 0,
+                "timestamp_seconds": 0.6,
+                "description": "Split-screen founder + live automation node graph",
+                "asset_path": "frames/org-rec-201/f000.jpg"
+              }
+            ],
+            "actions": [
+              {
+                "description": "Highlights spreadsheet pain point then triggers automated workflow run",
+                "frame_indices": [0, 4, 7],
+                "start_seconds": 0.0,
+                "end_seconds": 24.0
+              },
+              {
+                "description": "Points upward to template download & trial CTA banner",
+                "frame_indices": [9, 10],
+                "start_seconds": 25.0,
+                "end_seconds": 35.0
+              }
+            ],
+            "coverage": "full",
+            "audio_delivery": "direct_to_camera_voice",
+            "action_localization": "timestamp_grounded"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-201.mp4",
+            "video_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T09:10:00Z",
+            "views": 495000,
+            "likes": 46100,
+            "shares": 14800,
+            "comments": 3890,
+            "saves": 31200,
+            "like_rate": 0.0931,
+            "share_rate": 0.0299
+          },
+          "features": {
+            "topic": "AI workflow automation SaaS",
+            "hook_type": "time_saved_shock",
+            "format": "split_screen_demo",
+            "call_to_action": "Comment STACK or start 14-day free trial",
+            "opening_text": "Stop copying ad metrics into spreadsheets every Monday.",
+            "evidence_sources": ["transcript", "on_screen_text", "visual"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "complete",
+            "taxonomy_version": "1.2",
+            "input_truncated": false,
+            "min_confidence": 0.92
+          },
+          "limitations": []
+        }
+      ]
+    },
+    {
+      "trend_id": "trend-pocket-thermal-journaling",
+      "title": "Pocket Thermal Receipt Printer Micro-Journaling",
+      "summary": "Stationery and analog-mindfulness creators print black-and-white daily gratitude receipts, book quotes, and habit trackers on inkless Bluetooth thermal pocket printers and paste them into kraft notebooks.",
+      "discovered_at": "2026-11-07T11:45:00Z",
+      "shared_elements": [
+        "thermal_paper_tear_asmr",
+        "inkless_bluetooth_mini_printer",
+        "kraft_grid_notebook_collage"
+      ],
+      "records": [
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-301",
+          "status": "complete",
+          "video": {
+            "platform": "tiktok",
+            "id": "tt-7440019283",
+            "url": "https://www.tiktok.com/@paper.moss/video/7440019283",
+            "creator_id": "paper.moss",
+            "published_at": "2026-11-06T20:00:00Z",
+            "duration_seconds": 21
+          },
+          "collection": {
+            "run_id": "apify-run-9930",
+            "collected_at": "2026-11-07T10:00:00Z",
+            "discovery_queries": ["thermal pocket printer journal", "analog habit log"]
+          },
+          "language": {
+            "code": "en",
+            "confidence": 0.97,
+            "source": "whisper-lid",
+            "supported": true,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "Printing tonight's reading log on BPA-free sticker thermal paper. Zero ink cartridges, pure tactile calm. Shop the pocket printer bundle in bio.",
+            "hashtags": ["thermalprinter", "journaling", "stationery", "analoglife", "scrapbook", "desksetup"],
+            "transcript": {
+              "status": "complete",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "en",
+              "text": "My favorite five minute evening wind down is printing my daily polaroid frame and reading receipt on sticker thermal paper and pressing it into my pocket notebook.",
+              "segments": [
+                {
+                  "start_seconds": 0.0,
+                  "end_seconds": 11.4,
+                  "text": "My favorite five minute evening wind down is printing my daily polaroid frame and reading receipt on sticker thermal paper"
+                },
+                {
+                  "start_seconds": 11.4,
+                  "end_seconds": 20.1,
+                  "text": "and pressing it into my pocket notebook."
+                }
+              ]
+            },
+            "sound": {
+              "id": "snd-orig-301",
+              "title": "Paper Tear & Rain Ambience",
+              "author": "paper.moss",
+              "is_original": true
+            },
+            "on_screen_text": {
+              "status": "complete",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "5-min inkless receipt journaling", "frame_index": 1, "timestamp_seconds": 1.2 },
+                { "text": "Pocket Thermal Printer in bio", "frame_index": 7, "timestamp_seconds": 16.5 }
+              ]
+            },
+            "text_sequences": [
+              {
+                "source": "ocr+transcript",
+                "text": "inkless thermal receipt journaling stationery",
+                "normalized": "inkless thermal receipt journaling stationery",
+                "folded": "inkless thermal receipt journaling stationery",
+                "tokens": ["inkless", "thermal", "receipt", "journaling", "stationery", "notebook"],
+                "start_seconds": 1.2,
+                "end_seconds": 18.0
+              }
+            ],
+            "numeric_expressions": [
+              {
+                "source": "ocr",
+                "text": "5-min",
+                "compact_digits": "5",
+                "start_seconds": 1.2,
+                "match_hint_only": true
+              }
+            ]
+          },
+          "description": {
+            "text": "Overhead warm-lamp POV showing a palm-sized thermal printer extruding monochrome sticker receipts pasted into a dotted journal.",
+            "sources": ["transcript", "on_screen_text", "visual"],
+            "method": "multimodal-fusion-v2"
+          },
+          "visual": {
+            "status": "complete",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Warm wooden desk overhead shot of mini thermal receipt printer printing halftone photo strip and tearing serrated edge into kraft journal.",
+            "frames": [
+              {
+                "index": 2,
+                "timestamp_seconds": 4.0,
+                "description": "Mini white thermal printer outputting black-and-white dithered book receipt",
+                "asset_path": "frames/org-rec-301/f002.jpg"
+              }
+            ],
+            "actions": [
+              {
+                "description": "Tears thermal sticker strip and smooths onto dotted kraft notebook page",
+                "frame_indices": [2, 5],
+                "start_seconds": 3.5,
+                "end_seconds": 16.0
+              }
+            ],
+            "coverage": "full",
+            "audio_delivery": "soft_voiceover_asmr",
+            "action_localization": "timestamp_grounded"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-301.mp4",
+            "video_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T10:05:00Z",
+            "views": 318000,
+            "likes": 41200,
+            "shares": 9400,
+            "comments": 780,
+            "saves": 22600,
+            "like_rate": 0.1296,
+            "share_rate": 0.0296
+          },
+          "features": {
+            "topic": "thermal receipt stationery journaling",
+            "hook_type": "tactile_asmr_reveal",
+            "format": "pov",
+            "call_to_action": "Shop pocket printer bundle in bio",
+            "opening_text": "My favorite five minute evening wind down is printing my daily reading receipt.",
+            "evidence_sources": ["transcript", "on_screen_text", "visual"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "complete",
+            "taxonomy_version": "1.2",
+            "input_truncated": false,
+            "min_confidence": 0.74
+          },
+          "limitations": []
+        }
+      ]
+    },
+    {
+      "trend_id": "trend-hojicha-cloud-asmr",
+      "title": "Cold-Whisked Hojicha Sea-Salt Cloud Latte",
+      "summary": "Home cafe creators layer roasted green tea hojicha over iced oat milk with salted maple cold foam in silent ASMR glass pours.",
+      "discovered_at": "2026-11-07T12:10:00Z",
+      "shared_elements": [
+        "ice_clink_asmr_opening",
+        "bamboo_whisk_hojicha_shot",
+        "layered_cloud_foam_pour"
+      ],
+      "records": [
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-401",
+          "status": "partial",
+          "video": {
+            "platform": "tiktok",
+            "id": "tt-7440120044",
+            "url": "https://www.tiktok.com/@sunday.pour/video/7440120044",
+            "creator_id": "sunday.pour",
+            "published_at": "2026-11-06T09:15:00Z",
+            "duration_seconds": 19
+          },
+          "collection": {
+            "run_id": "apify-run-9935",
+            "collected_at": "2026-11-07T10:30:00Z",
+            "discovery_queries": ["hojicha cloud latte", "home cafe asmr"]
+          },
+          "language": {
+            "code": "en",
+            "confidence": 0.84,
+            "source": "caption-lid",
+            "supported": true,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "Move over matcha — roasted hojicha + sea salt maple cream is the cozy afternoon drink of the season.",
+            "hashtags": ["hojicha", "matcha", "homecafe", "latte", "coffeetiktok", "recipe"],
+            "transcript": {
+              "status": "partial",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "en",
+              "text": "",
+              "segments": []
+            },
+            "sound": {
+              "id": "snd-trend-912",
+              "title": "Acoustic Espresso Morning",
+              "author": "cafe.beats",
+              "is_original": false
+            },
+            "on_screen_text": {
+              "status": "complete",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "Salted Maple Hojicha Cloud Latte", "frame_index": 0, "timestamp_seconds": 0.4 },
+                { "text": "4g roasted hojicha + 40ml warm water + salted cream", "frame_index": 4, "timestamp_seconds": 7.2 }
+              ]
+            },
+            "text_sequences": [
+              {
+                "source": "ocr",
+                "text": "Salted Maple Hojicha Cloud Latte",
+                "normalized": "salted maple hojicha cloud latte",
+                "folded": "salted maple hojicha cloud latte",
+                "tokens": ["hojicha", "latte", "recipe", "cream"],
+                "start_seconds": 0.4,
+                "end_seconds": 7.2
+              }
+            ],
+            "numeric_expressions": []
+          },
+          "description": {
+            "text": "No-dialogue ASMR home cafe recipe layering whisked hojicha tea and salted cream foam over ribbed glass of iced milk.",
+            "sources": ["on_screen_text", "visual", "post_description"],
+            "method": "multimodal-fusion-v2"
+          },
+          "visual": {
+            "status": "complete",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Sunlight kitchen counter close-up pouring dark amber hojicha and thick cream cap over clear ice cubes.",
+            "frames": [
+              {
+                "index": 0,
+                "timestamp_seconds": 0.4,
+                "description": "Ribbed glass filled with clear ice cubes in morning sun",
+                "asset_path": "frames/org-rec-401/f000.jpg"
+              }
+            ],
+            "actions": [
+              {
+                "description": "Whisks hojicha paste and pours layered cloud foam",
+                "frame_indices": [2, 4, 6],
+                "start_seconds": 2.0,
+                "end_seconds": 17.5
+              }
+            ],
+            "coverage": "full",
+            "audio_delivery": "asmr_ambient_no_speech",
+            "action_localization": "timestamp_grounded"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-401.mp4",
+            "video_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T10:35:00Z",
+            "views": 520000,
+            "likes": 61200,
+            "shares": 14100,
+            "comments": 640,
+            "saves": 38900,
+            "like_rate": 0.1177,
+            "share_rate": 0.0271
+          },
+          "features": {
+            "topic": "hojicha cloud latte recipe",
+            "hook_type": "asmr_pour",
+            "format": "asmr_close_up",
+            "call_to_action": "",
+            "opening_text": "Salted Maple Hojicha Cloud Latte",
+            "evidence_sources": ["on_screen_text", "visual"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "complete",
+            "taxonomy_version": "1.2",
+            "input_truncated": false,
+            "min_confidence": 0.85
+          },
+          "limitations": [
+            "no_spoken_transcript_asmr_audio_only",
+            "no_explicit_conversion_cta_detected"
+          ]
+        }
+      ]
+    },
+    {
+      "trend_id": "trend-unverified-miracle-drops-es",
+      "title": "Gotas Milagrosas Overnight Skin Cure (Unsupported Lang / Claim Risk)",
+      "summary": "Spanish-language viral clips claiming a homemade mystery herbal tincture permanently cures cystic acne overnight without dermatologist care.",
+      "discovered_at": "2026-11-07T12:30:00Z",
+      "shared_elements": [
+        "miracle_overnight_cure_claim",
+        "unlabeled_dropper_bottle"
+      ],
+      "records": [
+        {
+          "schema_version": "1.2",
+          "analysis_version": "organ-mvp-2",
+          "id": "org-rec-501",
+          "status": "unsupported_language",
+          "video": {
+            "platform": "tiktok",
+            "id": "tt-7440881209",
+            "url": "https://www.tiktok.com/@remedios.express/video/7440881209",
+            "creator_id": "remedios.express",
+            "published_at": "2026-11-06T23:10:00Z",
+            "duration_seconds": 31
+          },
+          "collection": {
+            "run_id": "apify-run-9940",
+            "collected_at": "2026-11-07T11:00:00Z",
+            "discovery_queries": ["acne skincare drops"]
+          },
+          "language": {
+            "code": "es",
+            "confidence": 0.98,
+            "source": "whisper-lid",
+            "supported": false,
+            "allowed": ["en"]
+          },
+          "elements": {
+            "post_description": "Cura garantizada en 24 horas — miracle guaranteed cure skin hack controversial!",
+            "hashtags": ["skincare", "acne", "remedios", "milagro"],
+            "transcript": {
+              "status": "skipped_unsupported_language",
+              "source": "whisper-large-v3",
+              "model": "whisper-large-v3-turbo",
+              "language": "es",
+              "text": "",
+              "segments": []
+            },
+            "sound": {
+              "id": "snd-orig-501",
+              "title": "Sonido Original",
+              "author": "remedios.express",
+              "is_original": true
+            },
+            "on_screen_text": {
+              "status": "partial",
+              "source": "paddleocr-v4",
+              "items": [
+                { "text": "Miracle guaranteed cure 24h!", "frame_index": 0, "timestamp_seconds": 0.5 }
+              ]
+            },
+            "text_sequences": [],
+            "numeric_expressions": []
+          },
+          "description": {
+            "text": "Unsupported Spanish-language clip promoting unverified miracle overnight acne cure.",
+            "sources": ["post_description", "on_screen_text"],
+            "method": "fallback-caption-only"
+          },
+          "visual": {
+            "status": "partial",
+            "model": "qwen2.5-vl-7b",
+            "summary": "Unlabeled amber dropper bottle held near camera with flashing text stickers.",
+            "frames": [],
+            "actions": [],
+            "coverage": "keyframes_only",
+            "audio_delivery": "unknown",
+            "action_localization": "none"
+          },
+          "media_evidence": {
+            "status": "verified",
+            "video_path": "media/org-rec-501.mp4",
+            "video_sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+          },
+          "observation": {
+            "observed_at": "2026-11-07T11:05:00Z",
+            "views": 290000,
+            "likes": 12400,
+            "shares": 6100,
+            "comments": 2900,
+            "saves": 4200,
+            "like_rate": 0.0428,
+            "share_rate": 0.0210
+          },
+          "features": {
+            "topic": "miracle acne cure claim",
+            "hook_type": "ragebait_claim",
+            "format": "talking_head",
+            "call_to_action": "DM for unverified link",
+            "opening_text": "Miracle guaranteed cure 24h!",
+            "evidence_sources": ["post_description", "on_screen_text"]
+          },
+          "classifier": {
+            "name": "organ-feature-tagger",
+            "model": "organ-mvp-2",
+            "status": "degraded",
+            "taxonomy_version": "1.2",
+            "input_truncated": true,
+            "min_confidence": 0.34
+          },
+          "limitations": [
+            "unsupported_language_es_for_english_pipeline",
+            "unverified_medical_miracle_claim_risk"
+          ]
+        }
+      ]
+    }
+  ]
+}

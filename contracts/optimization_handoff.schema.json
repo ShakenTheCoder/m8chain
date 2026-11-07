@@ -1,0 +1,1569 @@
+{
+  "$defs": {
+    "BusinessParams": {
+      "description": "Profile parameters specific to the Business marketing persona.",
+      "properties": {
+        "brand_safety_strictness": {
+          "default": "strict",
+          "enum": [
+            "standard",
+            "strict"
+          ],
+          "title": "Brand Safety Strictness",
+          "type": "string"
+        },
+        "campaign_objective": {
+          "default": "direct_conversion",
+          "enum": [
+            "awareness",
+            "lead_gen",
+            "direct_conversion"
+          ],
+          "title": "Campaign Objective",
+          "type": "string"
+        },
+        "commercial_fit_required": {
+          "default": true,
+          "title": "Commercial Fit Required",
+          "type": "boolean"
+        }
+      },
+      "title": "BusinessParams",
+      "type": "object"
+    },
+    "ClassifierMetadata": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "default": "",
+          "title": "Name",
+          "type": "string"
+        },
+        "model": {
+          "default": "",
+          "title": "Model",
+          "type": "string"
+        },
+        "status": {
+          "default": "complete",
+          "title": "Status",
+          "type": "string"
+        },
+        "taxonomy_version": {
+          "default": "",
+          "title": "Taxonomy Version",
+          "type": "string"
+        },
+        "input_truncated": {
+          "default": false,
+          "title": "Input Truncated",
+          "type": "boolean"
+        },
+        "min_confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Confidence",
+          "type": "number"
+        }
+      },
+      "title": "ClassifierMetadata",
+      "type": "object"
+    },
+    "CollectionMetadata": {
+      "additionalProperties": true,
+      "properties": {
+        "run_id": {
+          "default": "",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "collected_at": {
+          "default": "",
+          "title": "Collected At",
+          "type": "string"
+        },
+        "discovery_queries": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Discovery Queries",
+          "type": "array"
+        }
+      },
+      "title": "CollectionMetadata",
+      "type": "object"
+    },
+    "ContentCreatorParams": {
+      "description": "Profile parameters specific to the Content Creator persona.",
+      "properties": {
+        "preferred_formats": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred Formats",
+          "type": "array"
+        },
+        "max_production_effort": {
+          "default": "medium",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Max Production Effort",
+          "type": "string"
+        },
+        "growth_goal": {
+          "default": "virality",
+          "enum": [
+            "virality",
+            "engagement",
+            "community"
+          ],
+          "title": "Growth Goal",
+          "type": "string"
+        },
+        "original_audio_preference": {
+          "default": "any",
+          "enum": [
+            "any",
+            "trending_sound",
+            "original_only"
+          ],
+          "title": "Original Audio Preference",
+          "type": "string"
+        }
+      },
+      "title": "ContentCreatorParams",
+      "type": "object"
+    },
+    "DimensionBreakdown": {
+      "properties": {
+        "domain_relevance": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Domain Relevance",
+          "type": "number"
+        },
+        "persona_alignment": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Persona Alignment",
+          "type": "number"
+        },
+        "engagement_momentum": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Engagement Momentum",
+          "type": "number"
+        },
+        "execution_or_brand_safety": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Execution Or Brand Safety",
+          "type": "number"
+        },
+        "cta_and_conversion_fit": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Cta And Conversion Fit",
+          "type": "number"
+        },
+        "data_completeness": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Data Completeness",
+          "type": "number"
+        }
+      },
+      "title": "DimensionBreakdown",
+      "type": "object"
+    },
+    "ElementsInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "post_description": {
+          "default": "",
+          "title": "Post Description",
+          "type": "string"
+        },
+        "hashtags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Hashtags",
+          "type": "array"
+        },
+        "transcript": {
+          "$ref": "#/$defs/TranscriptInfo"
+        },
+        "sound": {
+          "$ref": "#/$defs/SoundInfo"
+        },
+        "on_screen_text": {
+          "$ref": "#/$defs/OnScreenTextInfo"
+        },
+        "text_sequences": {
+          "items": {
+            "$ref": "#/$defs/TextSequenceItem"
+          },
+          "title": "Text Sequences",
+          "type": "array"
+        },
+        "numeric_expressions": {
+          "items": {
+            "$ref": "#/$defs/NumericExpressionItem"
+          },
+          "title": "Numeric Expressions",
+          "type": "array"
+        }
+      },
+      "title": "ElementsInfo",
+      "type": "object"
+    },
+    "EvidenceReference": {
+      "properties": {
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "platform": {
+          "default": "tiktok",
+          "title": "Platform",
+          "type": "string"
+        },
+        "record_status": {
+          "default": "complete",
+          "title": "Record Status",
+          "type": "string"
+        },
+        "signal_type": {
+          "title": "Signal Type",
+          "type": "string"
+        },
+        "excerpt": {
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "timestamp_range": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timestamp Range"
+        }
+      },
+      "required": [
+        "record_id",
+        "signal_type",
+        "excerpt"
+      ],
+      "title": "EvidenceReference",
+      "type": "object"
+    },
+    "ExtractedFeatures": {
+      "additionalProperties": true,
+      "properties": {
+        "topic": {
+          "default": "",
+          "title": "Topic",
+          "type": "string"
+        },
+        "hook_type": {
+          "default": "",
+          "title": "Hook Type",
+          "type": "string"
+        },
+        "format": {
+          "default": "",
+          "title": "Format",
+          "type": "string"
+        },
+        "call_to_action": {
+          "default": "",
+          "title": "Call To Action",
+          "type": "string"
+        },
+        "opening_text": {
+          "default": "",
+          "title": "Opening Text",
+          "type": "string"
+        },
+        "evidence_sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Sources",
+          "type": "array"
+        }
+      },
+      "title": "ExtractedFeatures",
+      "type": "object"
+    },
+    "HandoffDeliveryStatus": {
+      "properties": {
+        "persisted_path": {
+          "title": "Persisted Path",
+          "type": "string"
+        },
+        "webhook_configured": {
+          "default": false,
+          "title": "Webhook Configured",
+          "type": "boolean"
+        },
+        "webhook_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Webhook Url"
+        },
+        "webhook_forwarded": {
+          "default": false,
+          "title": "Webhook Forwarded",
+          "type": "boolean"
+        },
+        "webhook_status_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Webhook Status Code"
+        },
+        "webhook_message": {
+          "default": "Ready for Optimization stage consumption via REST endpoint or JSON bundle.",
+          "title": "Webhook Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persisted_path"
+      ],
+      "title": "HandoffDeliveryStatus",
+      "type": "object"
+    },
+    "LanguageInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "code": {
+          "default": "en",
+          "title": "Code",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "source": {
+          "default": "detector",
+          "title": "Source",
+          "type": "string"
+        },
+        "supported": {
+          "default": true,
+          "title": "Supported",
+          "type": "boolean"
+        },
+        "allowed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed",
+          "type": "array"
+        }
+      },
+      "title": "LanguageInfo",
+      "type": "object"
+    },
+    "LayaTypedDecisionTrace": {
+      "description": "Structured output trace from `convaiinnovations/laya` (ModernBERT-large, 421M, 512 ctx, EN).",
+      "properties": {
+        "model_id": {
+          "default": "convaiinnovations/laya",
+          "title": "Model Id",
+          "type": "string"
+        },
+        "backbone": {
+          "default": "ModernBERT-large (421M params, 512 context, English)",
+          "title": "Backbone",
+          "type": "string"
+        },
+        "execution_mode": {
+          "default": "laya_calibrated_fallback",
+          "enum": [
+            "laya_sdk_local",
+            "laya_transformers_local",
+            "laya_hf_inference_api",
+            "laya_calibrated_fallback"
+          ],
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "estimated_input_tokens": {
+          "default": 0,
+          "title": "Estimated Input Tokens",
+          "type": "integer"
+        },
+        "max_context_tokens": {
+          "default": 512,
+          "title": "Max Context Tokens",
+          "type": "integer"
+        },
+        "input_truncated": {
+          "default": false,
+          "title": "Input Truncated",
+          "type": "boolean"
+        },
+        "english_compatible": {
+          "default": true,
+          "title": "English Compatible",
+          "type": "boolean"
+        },
+        "temperature": {
+          "default": 1.35,
+          "title": "Temperature",
+          "type": "number"
+        },
+        "choice_probabilities": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Choice Probabilities",
+          "type": "object"
+        },
+        "top_choice_id": {
+          "default": "",
+          "title": "Top Choice Id",
+          "type": "string"
+        },
+        "top_choice_confidence": {
+          "default": 0.0,
+          "title": "Top Choice Confidence",
+          "type": "number"
+        },
+        "virality_rubric_score": {
+          "default": 0.0,
+          "title": "Virality Rubric Score",
+          "type": "number"
+        },
+        "virality_rubric_label": {
+          "default": "moderate",
+          "title": "Virality Rubric Label",
+          "type": "string"
+        },
+        "commercial_rubric_score": {
+          "default": 0.0,
+          "title": "Commercial Rubric Score",
+          "type": "number"
+        },
+        "commercial_rubric_label": {
+          "default": "moderate",
+          "title": "Commercial Rubric Label",
+          "type": "string"
+        },
+        "production_effort_label": {
+          "default": "medium",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Production Effort Label",
+          "type": "string"
+        },
+        "brand_safe_probability": {
+          "default": 0.85,
+          "title": "Brand Safe Probability",
+          "type": "number"
+        },
+        "clear_cta_probability": {
+          "default": 0.5,
+          "title": "Clear Cta Probability",
+          "type": "number"
+        },
+        "emergent_niche_triggered": {
+          "default": false,
+          "title": "Emergent Niche Triggered",
+          "type": "boolean"
+        },
+        "compact_state_preview": {
+          "default": "",
+          "title": "Compact State Preview",
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "title": "LayaTypedDecisionTrace",
+      "type": "object"
+    },
+    "MediaEvidence": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "default": "verified",
+          "title": "Status",
+          "type": "string"
+        },
+        "video_path": {
+          "default": "",
+          "title": "Video Path",
+          "type": "string"
+        },
+        "video_sha256": {
+          "default": "",
+          "title": "Video Sha256",
+          "type": "string"
+        }
+      },
+      "title": "MediaEvidence",
+      "type": "object"
+    },
+    "NicheCluster": {
+      "description": "Matched or dynamically synthesized niche in Hybrid mode.",
+      "properties": {
+        "niche_id": {
+          "title": "Niche Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "origin": {
+          "default": "seed_taxonomy",
+          "enum": [
+            "seed_taxonomy",
+            "emergent_cluster",
+            "custom_user"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "taxonomy_source": {
+          "default": "convaiinnovations/laya-hybrid-v1",
+          "title": "Taxonomy Source",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "cohesion_score": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Cohesion Score",
+          "type": "number"
+        },
+        "keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "matched_trend_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Matched Trend Ids",
+          "type": "array"
+        },
+        "commercial_categories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Commercial Categories",
+          "type": "array"
+        }
+      },
+      "required": [
+        "niche_id",
+        "name",
+        "description"
+      ],
+      "title": "NicheCluster",
+      "type": "object"
+    },
+    "NumericExpressionItem": {
+      "additionalProperties": true,
+      "properties": {
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "compact_digits": {
+          "default": "",
+          "title": "Compact Digits",
+          "type": "string"
+        },
+        "start_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "match_hint_only": {
+          "default": true,
+          "title": "Match Hint Only",
+          "type": "boolean"
+        }
+      },
+      "title": "NumericExpressionItem",
+      "type": "object"
+    },
+    "ObservationMetrics": {
+      "additionalProperties": true,
+      "properties": {
+        "observed_at": {
+          "default": "",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "views": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Views",
+          "type": "integer"
+        },
+        "likes": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Likes",
+          "type": "integer"
+        },
+        "shares": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Shares",
+          "type": "integer"
+        },
+        "comments": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Comments",
+          "type": "integer"
+        },
+        "saves": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Saves",
+          "type": "integer"
+        },
+        "like_rate": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Like Rate",
+          "type": "number"
+        },
+        "share_rate": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Share Rate",
+          "type": "number"
+        }
+      },
+      "title": "ObservationMetrics",
+      "type": "object"
+    },
+    "OnScreenTextInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "default": "complete",
+          "title": "Status",
+          "type": "string"
+        },
+        "source": {
+          "default": "ocr",
+          "title": "Source",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/OnScreenTextItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "OnScreenTextInfo",
+      "type": "object"
+    },
+    "OnScreenTextItem": {
+      "additionalProperties": true,
+      "properties": {
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "frame_index": {
+          "default": 0,
+          "title": "Frame Index",
+          "type": "integer"
+        },
+        "timestamp_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Timestamp Seconds",
+          "type": "number"
+        }
+      },
+      "title": "OnScreenTextItem",
+      "type": "object"
+    },
+    "OptimizationSeedHints": {
+      "description": "Actionable seed parameters extracted from Validation to warm-start Part 3 GA/EP.",
+      "properties": {
+        "recommended_hook_type": {
+          "title": "Recommended Hook Type",
+          "type": "string"
+        },
+        "recommended_format": {
+          "title": "Recommended Format",
+          "type": "string"
+        },
+        "recommended_cta": {
+          "title": "Recommended Cta",
+          "type": "string"
+        },
+        "seed_hashtags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Seed Hashtags",
+          "type": "array"
+        },
+        "opening_hook_templates": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Opening Hook Templates",
+          "type": "array"
+        },
+        "target_duration_seconds_range": {
+          "default": [
+            15,
+            45
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Target Duration Seconds Range",
+          "type": "array"
+        },
+        "budget_allocation_posture": {
+          "default": "controlled_test",
+          "enum": [
+            "aggressive_scale",
+            "controlled_test",
+            "micro_experiment"
+          ],
+          "title": "Budget Allocation Posture",
+          "type": "string"
+        },
+        "suggested_initial_population_size": {
+          "default": 12,
+          "title": "Suggested Initial Population Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "recommended_hook_type",
+        "recommended_format",
+        "recommended_cta"
+      ],
+      "title": "OptimizationSeedHints",
+      "type": "object"
+    },
+    "OrganVideoRecordV1_2": {
+      "additionalProperties": true,
+      "description": "Exact runtime contract for an analyzed video record produced by `organ` (schema 1.2).",
+      "properties": {
+        "schema_version": {
+          "default": "1.2",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "analysis_version": {
+          "default": "organ-mvp-2",
+          "title": "Analysis Version",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "default": "complete",
+          "enum": [
+            "complete",
+            "partial",
+            "unsupported_language"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "video": {
+          "$ref": "#/$defs/VideoMetadata"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectionMetadata"
+        },
+        "language": {
+          "$ref": "#/$defs/LanguageInfo"
+        },
+        "elements": {
+          "$ref": "#/$defs/ElementsInfo"
+        },
+        "description": {
+          "$ref": "#/$defs/SynthesizedDescription"
+        },
+        "visual": {
+          "$ref": "#/$defs/VisualInfo"
+        },
+        "media_evidence": {
+          "$ref": "#/$defs/MediaEvidence"
+        },
+        "observation": {
+          "$ref": "#/$defs/ObservationMetrics"
+        },
+        "features": {
+          "$ref": "#/$defs/ExtractedFeatures"
+        },
+        "classifier": {
+          "$ref": "#/$defs/ClassifierMetadata"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "video"
+      ],
+      "title": "OrganVideoRecordV1_2",
+      "type": "object"
+    },
+    "PersonaProfile": {
+      "description": "Active user persona evaluated by the Suitability Verdict Engine.",
+      "properties": {
+        "type": {
+          "default": "content_creator",
+          "enum": [
+            "content_creator",
+            "business"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "display_name": {
+          "default": "Solo Creator Studio",
+          "title": "Display Name",
+          "type": "string"
+        },
+        "target_domain": {
+          "default": "Skincare & Everyday Wellness",
+          "title": "Target Domain",
+          "type": "string"
+        },
+        "domain_keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Domain Keywords",
+          "type": "array"
+        },
+        "target_audience": {
+          "default": "Gen Z & Millennial short-form video viewers (18-34)",
+          "title": "Target Audience",
+          "type": "string"
+        },
+        "allowed_languages": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Languages",
+          "type": "array"
+        },
+        "creator_params": {
+          "$ref": "#/$defs/ContentCreatorParams"
+        },
+        "business_params": {
+          "$ref": "#/$defs/BusinessParams"
+        }
+      },
+      "title": "PersonaProfile",
+      "type": "object"
+    },
+    "SelectedTrendBundle": {
+      "properties": {
+        "trend_id": {
+          "title": "Trend Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "shared_elements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Shared Elements",
+          "type": "array"
+        },
+        "dominant_features": {
+          "$ref": "#/$defs/TrendDominantFeatures"
+        },
+        "benchmark_metrics": {
+          "$ref": "#/$defs/TrendBenchmarkMetrics"
+        },
+        "supporting_records": {
+          "items": {
+            "$ref": "#/$defs/OrganVideoRecordV1_2"
+          },
+          "title": "Supporting Records",
+          "type": "array"
+        }
+      },
+      "required": [
+        "trend_id",
+        "title",
+        "summary",
+        "dominant_features",
+        "benchmark_metrics",
+        "supporting_records"
+      ],
+      "title": "SelectedTrendBundle",
+      "type": "object"
+    },
+    "SoundInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "default": "",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "author": {
+          "default": "",
+          "title": "Author",
+          "type": "string"
+        },
+        "is_original": {
+          "default": true,
+          "title": "Is Original",
+          "type": "boolean"
+        }
+      },
+      "title": "SoundInfo",
+      "type": "object"
+    },
+    "SuitabilityVerdict": {
+      "description": "Structured verdict for a (Trend, Niche) pair evaluated under an active Persona.",
+      "properties": {
+        "trend_id": {
+          "title": "Trend Id",
+          "type": "string"
+        },
+        "niche_id": {
+          "title": "Niche Id",
+          "type": "string"
+        },
+        "persona_type": {
+          "title": "Persona Type",
+          "type": "string"
+        },
+        "fit_status": {
+          "enum": [
+            "strong_fit",
+            "conditional_fit",
+            "weak_fit",
+            "disqualified"
+          ],
+          "title": "Fit Status",
+          "type": "string"
+        },
+        "overall_score": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Overall Score",
+          "type": "number"
+        },
+        "dimension_scores": {
+          "$ref": "#/$defs/DimensionBreakdown"
+        },
+        "headline": {
+          "title": "Headline",
+          "type": "string"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "strengths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Strengths",
+          "type": "array"
+        },
+        "risks_and_limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Risks And Limitations",
+          "type": "array"
+        },
+        "recommended_angles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Recommended Angles",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/EvidenceReference"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "trend_id",
+        "niche_id",
+        "persona_type",
+        "fit_status",
+        "dimension_scores",
+        "headline",
+        "rationale"
+      ],
+      "title": "SuitabilityVerdict",
+      "type": "object"
+    },
+    "SynthesizedDescription": {
+      "additionalProperties": true,
+      "properties": {
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "method": {
+          "default": "",
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "title": "SynthesizedDescription",
+      "type": "object"
+    },
+    "TextSequenceItem": {
+      "additionalProperties": true,
+      "properties": {
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "normalized": {
+          "default": "",
+          "title": "Normalized",
+          "type": "string"
+        },
+        "folded": {
+          "default": "",
+          "title": "Folded",
+          "type": "string"
+        },
+        "tokens": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tokens",
+          "type": "array"
+        },
+        "start_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "End Seconds",
+          "type": "number"
+        }
+      },
+      "title": "TextSequenceItem",
+      "type": "object"
+    },
+    "TranscriptInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "default": "complete",
+          "title": "Status",
+          "type": "string"
+        },
+        "source": {
+          "default": "asr",
+          "title": "Source",
+          "type": "string"
+        },
+        "model": {
+          "default": "",
+          "title": "Model",
+          "type": "string"
+        },
+        "language": {
+          "default": "en",
+          "title": "Language",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/TranscriptSegment"
+          },
+          "title": "Segments",
+          "type": "array"
+        }
+      },
+      "title": "TranscriptInfo",
+      "type": "object"
+    },
+    "TranscriptSegment": {
+      "additionalProperties": true,
+      "properties": {
+        "start_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "End Seconds",
+          "type": "number"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "title": "TranscriptSegment",
+      "type": "object"
+    },
+    "TrendBenchmarkMetrics": {
+      "additionalProperties": true,
+      "properties": {
+        "record_count": {
+          "default": 0,
+          "title": "Record Count",
+          "type": "integer"
+        },
+        "usable_record_count": {
+          "default": 0,
+          "title": "Usable Record Count",
+          "type": "integer"
+        },
+        "complete_count": {
+          "default": 0,
+          "title": "Complete Count",
+          "type": "integer"
+        },
+        "partial_count": {
+          "default": 0,
+          "title": "Partial Count",
+          "type": "integer"
+        },
+        "unsupported_language_count": {
+          "default": 0,
+          "title": "Unsupported Language Count",
+          "type": "integer"
+        },
+        "total_views": {
+          "default": 0,
+          "title": "Total Views",
+          "type": "integer"
+        },
+        "avg_views": {
+          "default": 0.0,
+          "title": "Avg Views",
+          "type": "number"
+        },
+        "avg_like_rate": {
+          "default": 0.0,
+          "title": "Avg Like Rate",
+          "type": "number"
+        },
+        "avg_share_rate": {
+          "default": 0.0,
+          "title": "Avg Share Rate",
+          "type": "number"
+        },
+        "avg_save_rate": {
+          "default": 0.0,
+          "title": "Avg Save Rate",
+          "type": "number"
+        },
+        "avg_comment_rate": {
+          "default": 0.0,
+          "title": "Avg Comment Rate",
+          "type": "number"
+        }
+      },
+      "title": "TrendBenchmarkMetrics",
+      "type": "object"
+    },
+    "TrendDominantFeatures": {
+      "additionalProperties": true,
+      "properties": {
+        "topic": {
+          "default": "",
+          "title": "Topic",
+          "type": "string"
+        },
+        "hook_type": {
+          "default": "",
+          "title": "Hook Type",
+          "type": "string"
+        },
+        "format": {
+          "default": "",
+          "title": "Format",
+          "type": "string"
+        },
+        "call_to_action": {
+          "default": "",
+          "title": "Call To Action",
+          "type": "string"
+        },
+        "common_hashtags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Common Hashtags",
+          "type": "array"
+        },
+        "sound_motif": {
+          "default": "",
+          "title": "Sound Motif",
+          "type": "string"
+        }
+      },
+      "title": "TrendDominantFeatures",
+      "type": "object"
+    },
+    "VideoMetadata": {
+      "additionalProperties": true,
+      "properties": {
+        "platform": {
+          "default": "tiktok",
+          "title": "Platform",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        },
+        "creator_id": {
+          "default": "",
+          "title": "Creator Id",
+          "type": "string"
+        },
+        "published_at": {
+          "default": "",
+          "title": "Published At",
+          "type": "string"
+        },
+        "duration_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Duration Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "VideoMetadata",
+      "type": "object"
+    },
+    "VisualAction": {
+      "additionalProperties": true,
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "frame_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Frame Indices",
+          "type": "array"
+        },
+        "start_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "End Seconds",
+          "type": "number"
+        }
+      },
+      "title": "VisualAction",
+      "type": "object"
+    },
+    "VisualFrame": {
+      "additionalProperties": true,
+      "properties": {
+        "index": {
+          "default": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "timestamp_seconds": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Timestamp Seconds",
+          "type": "number"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "asset_path": {
+          "default": "",
+          "title": "Asset Path",
+          "type": "string"
+        }
+      },
+      "title": "VisualFrame",
+      "type": "object"
+    },
+    "VisualInfo": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "default": "complete",
+          "title": "Status",
+          "type": "string"
+        },
+        "model": {
+          "default": "",
+          "title": "Model",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "frames": {
+          "items": {
+            "$ref": "#/$defs/VisualFrame"
+          },
+          "title": "Frames",
+          "type": "array"
+        },
+        "actions": {
+          "items": {
+            "$ref": "#/$defs/VisualAction"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "coverage": {
+          "default": "full",
+          "title": "Coverage",
+          "type": "string"
+        },
+        "audio_delivery": {
+          "default": "",
+          "title": "Audio Delivery",
+          "type": "string"
+        },
+        "action_localization": {
+          "default": "",
+          "title": "Action Localization",
+          "type": "string"
+        }
+      },
+      "title": "VisualInfo",
+      "type": "object"
+    }
+  },
+  "description": "Clean handoff bundle passed from Part 2 (`validation`) -> Part 3 (`optimization`).",
+  "properties": {
+    "handoff_version": {
+      "default": "1.0",
+      "title": "Handoff Version",
+      "type": "string"
+    },
+    "handoff_id": {
+      "title": "Handoff Id",
+      "type": "string"
+    },
+    "confirmed_at": {
+      "title": "Confirmed At",
+      "type": "string"
+    },
+    "source_branch": {
+      "default": "validation",
+      "title": "Source Branch",
+      "type": "string"
+    },
+    "target_branch": {
+      "default": "optimization",
+      "title": "Target Branch",
+      "type": "string"
+    },
+    "persona": {
+      "$ref": "#/$defs/PersonaProfile"
+    },
+    "niche": {
+      "$ref": "#/$defs/NicheCluster"
+    },
+    "selected_trend": {
+      "$ref": "#/$defs/SelectedTrendBundle"
+    },
+    "suitability_verdict": {
+      "$ref": "#/$defs/SuitabilityVerdict"
+    },
+    "laya_decision_trace": {
+      "$ref": "#/$defs/LayaTypedDecisionTrace"
+    },
+    "optimization_seed_hints": {
+      "$ref": "#/$defs/OptimizationSeedHints"
+    },
+    "user_notes": {
+      "default": "",
+      "title": "User Notes",
+      "type": "string"
+    },
+    "delivery": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HandoffDeliveryStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "handoff_id",
+    "confirmed_at",
+    "persona",
+    "niche",
+    "selected_trend",
+    "suitability_verdict",
+    "laya_decision_trace",
+    "optimization_seed_hints"
+  ],
+  "title": "OptimizationHandoffBundle",
+  "type": "object"
+}

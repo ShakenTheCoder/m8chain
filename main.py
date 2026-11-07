@@ -80,7 +80,7 @@ def health_check() -> Dict[str, str]:
 @app.post(
     "/api/v1/optimize/init",
     response_model=InitCampaignResponse,
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     tags=["Optimization"],
 )
 def initialize_campaign(request: InitCampaignRequest) -> InitCampaignResponse:

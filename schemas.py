@@ -9,7 +9,7 @@ from __future__ import annotations
 import uuid
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class PersonaType(str, Enum):
@@ -213,6 +213,17 @@ class InitCampaignRequest(BaseModel):
     """Request payload to initialize a new evolutionary campaign."""
     validation_input: ValidationInput
     config: Optional[GAConfig] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def resolve_payload(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "validation_input" not in data and "trend_name" in data:
+                # Wrap direct ValidationInput provided at root level
+                config = data.get("config")
+                validation_data = {k: v for k, v in data.items() if k != "config"}
+                return {"validation_input": validation_data, "config": config}
+        return data
 
 
 class InitCampaignResponse(BaseModel):

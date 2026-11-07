@@ -92,6 +92,12 @@ class BudgetReallocator:
             Candidates with updated budget allocations strictly summing to total_budget.
         """
         active_candidates = [c for c in candidates if c.status != "eliminated"]
+        for c in candidates:
+            if c.status == "eliminated":
+                c.budget.daily_budget = 0.0
+                c.budget.spend_weight = 0.0
+                c.budget.bid_aggressiveness = 0.0
+
         if not active_candidates:
             return candidates
 
@@ -209,14 +215,23 @@ class BudgetReallocator:
             budgets = (budgets / current_sum) * total_budget
             budgets = np.clip(budgets, min_budget, max_budget)
 
-        # Distribute any remaining residual due to clipping to top performer
+        # Distribute any remaining residual due to continuous clipping
         residual = total_budget - float(budgets.sum())
         budgets[np.argmax(budgets)] += residual
 
+        # Round budgets to 2 decimal places (exact cents)
+        rounded_budgets = [round(float(b), 2) for b in budgets]
+        cent_diff = round(total_budget - sum(rounded_budgets), 2)
+
+        # Distribute cent discrepancy to ensure sum(budgets) <= total_budget exactly with zero leak
+        if cent_diff != 0:
+            top_idx = int(np.argmax(budgets))
+            rounded_budgets[top_idx] = round(rounded_budgets[top_idx] + cent_diff, 2)
+
         # Assign back to candidates and recompute normalized spend weights
-        for c, b in zip(candidates, budgets):
-            c.budget.daily_budget = round(float(b), 2)
-            c.budget.spend_weight = float(b / total_budget)
+        for c, b in zip(candidates, rounded_budgets):
+            c.budget.daily_budget = b
+            c.budget.spend_weight = float(b / total_budget) if total_budget > 0 else 0.0
 
     @staticmethod
     def get_budget_breakdown(candidates: List[Candidate]) -> Dict[str, float]:
@@ -227,8 +242,8 @@ class BudgetReallocator:
     def verify_budget_conservation(
         candidates: List[Candidate],
         total_budget: float,
-        tolerance: float = 0.50,
+        tolerance: float = 0.05,
     ) -> bool:
         """Check if sum of active budgets matches total budget within cent precision."""
-        active_sum = sum(c.budget.daily_budget for c in candidates if c.status != "eliminated")
-        return abs(active_sum - total_budget) <= tolerance
+        active_sum = round(sum(c.budget.daily_budget for c in candidates if c.status != "eliminated"), 2)
+        return (active_sum <= total_budget + 1e-4) and (abs(active_sum - total_budget) <= tolerance)

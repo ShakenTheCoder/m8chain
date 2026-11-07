@@ -136,7 +136,7 @@ def test_fastapi_lifecycle_workflow(sample_validation_input):
         "config": {"population_size": 6, "mutation_rate": 0.20},
     }
     init_res = client.post("/api/v1/optimize/init", json=init_payload)
-    assert init_res.status_code == 201
+    assert init_res.status_code == 200
     init_data = init_res.json()
     campaign_id = init_data["campaign_id"]
     assert campaign_id.startswith("camp_")

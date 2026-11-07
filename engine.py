@@ -340,11 +340,10 @@ class EvolutionaryOptimizationEngine:
                         "roas": obs.roas,
                         "spend": obs.spend,
                     }
-        else:
+            self.evaluate_fitness(population, validation_input.persona, observations)
+        elif all(c.fitness_score <= 0.0 for c in population):
             observations = self.simulator.evaluate_population(population, validation_input)
-
-        # 2. Fitness Evaluation
-        self.evaluate_fitness(population, validation_input.persona, observations)
+            self.evaluate_fitness(population, validation_input.persona, observations)
 
         # Sort population descending by fitness
         population.sort(key=lambda c: c.fitness_score, reverse=True)
